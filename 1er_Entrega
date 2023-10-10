@@ -1,3 +1,0 @@
-const test = 'Hola, esto es en test'
-
-console.log(test)
