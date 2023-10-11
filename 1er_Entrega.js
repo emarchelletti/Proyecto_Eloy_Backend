@@ -1,4 +1,3 @@
-
 class ProductManager {
   constructor() {
     this.products = [];
@@ -13,7 +12,7 @@ class ProductManager {
 
     const codeExists = this.products.some(product => product.code === code);
     if (codeExists) {
-      throw new Error("El código del producto ya existe");
+      console.log("El código del producto ya existe");
     }
 
     const product = {
@@ -26,36 +25,43 @@ class ProductManager {
       id: this.nextId,
     };
 
-
     this.products.push(product);
     this.nextId++;
-
-
-
   }
 
   getProducts() {
     return this.products;
   }
 
-
   getProductById(id) {
     const productById = this.products.find(product => product.id === id);
     if (productById) {
       return productById
     } else {
-      throw new Error('El producto con ese Id no existe')
+      console.log('El producto con ese Id no existe')
     }
   }
 }
 
+//✓	Se creará una instancia de la clase “ProductManager”
 const manager = new ProductManager();
+//✓	Se llamará “getProducts” recién creada la instancia, debe devolver un arreglo vacío []
+console.log(manager.getProducts());
+//✓	Se llamará al método “addProduct” y el objeto debe agregarse satisfactoriamente con un id generado automáticamente SIN REPETIRSE
+manager.addProduct("Producto de Prueba 1", "Este es un producto prueba", 100, "Sin Imagen", "abc123", 25);
+//✓	Se llamará el método “getProducts” nuevamente, esta vez debe aparecer el producto recién agregado
+console.log(manager.getProducts());
+//✓	Se llamará al método “addProduct” con los mismos campos de arriba, debe arrojar un error porque el código estará repetido.
+manager.addProduct("Producto de Prueba 1", "Este es un producto prueba", 100, "Sin Imagen", "abc123", 25);
+//✓	Se evaluará que getProductById devuelva error si no encuentra el producto o el producto en caso de encontrarlo
+console.log(manager.getProductById(3))
+console.log(manager.getProductById(1))
 
-manager.addProduct("Producto 1", "Descripción del Producto 1", 100, "imagen1.jpg", "P001", 10);
-manager.addProduct("Producto 2", "Descripción del Producto 2", 200, "imagen2.jpg", "P002", 20);
 
-const products = manager.getProducts();
-const productById = manager.getProductById(2)
+//manager.addProduct("Producto de Prueba 2", "Este es un producto prueba", 200, "Sin Imagen", "abc456", 25);
 
-console.log('Los productos del array son: ', products)
-console.log(`El producto con el Id: ${productById.id} es: \n`, productById)
+//const products = manager.getProducts();
+//const productById = manager.getProductById(2)
+
+//console.log('Los productos del array son: ', products)
+//console.log(`El producto con el Id: ${productById.id} es: \n`, productById)
