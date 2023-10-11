@@ -57,11 +57,3 @@ manager.addProduct("Producto de Prueba 1", "Este es un producto prueba", 100, "S
 console.log(manager.getProductById(3))
 console.log(manager.getProductById(1))
 
-
-//manager.addProduct("Producto de Prueba 2", "Este es un producto prueba", 200, "Sin Imagen", "abc456", 25);
-
-//const products = manager.getProducts();
-//const productById = manager.getProductById(2)
-
-//console.log('Los productos del array son: ', products)
-//console.log(`El producto con el Id: ${productById.id} es: \n`, productById)
