@@ -1,3 +1,4 @@
+
 class ProductManager {
   constructor() {
     this.products = [];
@@ -33,17 +34,17 @@ class ProductManager {
 
   }
 
-
   getProducts() {
     return this.products;
   }
 
+
   getProductById(id) {
-    const productById = this.products.map(product => product.id === id);
+    const productById = this.products.find(product => product.id === id);
     if (productById) {
-     return productById
+      return productById
     } else {
-      throw new Error ('El producto con ese Id no existe')
+      throw new Error('El producto con ese Id no existe')
     }
   }
 }
@@ -54,7 +55,7 @@ manager.addProduct("Producto 1", "Descripción del Producto 1", 100, "imagen1.jp
 manager.addProduct("Producto 2", "Descripción del Producto 2", 200, "imagen2.jpg", "P002", 20);
 
 const products = manager.getProducts();
+const productById = manager.getProductById(2)
 
-
-console.log(products)
-manager.getProductById(2)
+console.log('Los productos del array son: ', products)
+console.log(`El producto con el Id: ${productById.id} es: \n`, productById)
