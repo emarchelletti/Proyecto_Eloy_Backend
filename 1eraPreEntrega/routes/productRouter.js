@@ -1,8 +1,8 @@
 import express from 'express';
-import {ProductManager} from  '../src/ProductManager'
+import {productManager} from '../src/productManager.js';
 
-const productRouter = express.Router();
-const manager = new ProductManager('../data/products.json');
+export const productRouter = express.Router();
+const manager = new productManager('../data/products.json');
 
 // Ruta raíz GET /api/products
 productRouter.get('/', async (req, res) => {
@@ -70,4 +70,3 @@ productRouter.delete('/:pid', async (req, res) => {
   }
 });
 
-module.exports = productRouter;

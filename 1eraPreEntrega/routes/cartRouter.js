@@ -1,7 +1,8 @@
 import express from 'express';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 
-const cartRouter = express.Router();
+
+export const cartRouter = express.Router();
 const cartFile = '../data/cart.json';
 
 cartRouter.use(express.json());
@@ -65,4 +66,3 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
   }
 });
 
-module.exports = cartRouter;

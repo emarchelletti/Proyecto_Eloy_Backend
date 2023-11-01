@@ -1,11 +1,25 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 
-class ProductManager {
+export class productManager {
   constructor(path) {
     this.path = path;
     this.products = [];
-    this.nextId = 1;
+    this.loadProducts();
   }
+
+  loadProducts() {
+    try {
+      const data = fs.readFile(this.path, 'utf-8');
+      this.products = JSON.parse(data);
+      // Determinar el próximo ID disponible
+      const maxId = this.products.reduce((max, product) => (product.id > max ? product.id : max), 0);
+      this.nextId = maxId + 1;
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+    }
+  }
+
+  
 
   async saveProducts() {
     try {
@@ -102,6 +116,5 @@ class ProductManager {
   }
 }
 
-module.exports = ProductManager;
 
 
