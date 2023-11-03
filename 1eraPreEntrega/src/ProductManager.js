@@ -1,25 +1,31 @@
 import { promises as fs } from 'fs';
 
-export class productManager {
+class productManager {
   constructor(path) {
     this.path = path;
     this.products = [];
     this.loadProducts();
   }
 
-  loadProducts() {
+  async loadProducts() {
     try {
-      const data = fs.readFile(this.path, 'utf-8');
+      const data = await fs.readFile(this.path, 'utf-8');
       this.products = JSON.parse(data);
+
       // Determinar el próximo ID disponible
       const maxId = this.products.reduce((max, product) => (product.id > max ? product.id : max), 0);
       this.nextId = maxId + 1;
+      console.log('El proximo producto que se agregue tendra el id: ' + this.nextId);
+
+      if (this.products.length > 0) {
+        console.log('Hay productos cargados');
+      } else {
+        console.log('No hay productos cargados');
+      }
     } catch (error) {
       console.error('Error al cargar productos:', error);
     }
   }
-
-  
 
   async saveProducts() {
     try {
@@ -29,10 +35,32 @@ export class productManager {
     }
   }
 
-
   async addProduct(product) {
+    const { title, description, code, price, stock, category } = product;
+
+
+    const existingProduct = this.products.find(p => p.code === code);
+    if (existingProduct) {
+      throw new Error('El producto con este código ya existe');
+    }
+    //Todos los campos son obligatorios, a excepción de thumbnails
+    if (!title || !description || !code || !price || !stock || !category) {
+      throw new Error('Todos los campos son obligatorios');
+    }
+
     const id = this.nextId++;
-    const newProduct = { id, ...product };
+    const newProduct = {
+      id,
+      title,
+      description,
+      code,
+      price,
+      status: true, // Valor por defecto
+      stock,
+      category,
+      thumbnails: product.thumbnails || []
+    }
+
     this.products.push(newProduct);
 
     try {
@@ -44,8 +72,6 @@ export class productManager {
     }
   }
 
-
-
   async getProducts() {
     try {
       const data = await fs.readFile(this.path, 'utf-8');
@@ -53,19 +79,19 @@ export class productManager {
       console.log('Se muestra listado de productos');
       return this.products;
     } catch (error) {
-      console.error('Error al obtener productos:', error);
+      console.error('Error al obtener productos', error);
       return [];
     }
   }
 
   async getProductById(id) {
     const productById = this.products.find(product => product.id === id);
+    console.log('Se realizó una búsqueda por id');
+
     if (productById) {
-      console.log('Resultado de la búsqueda por Id');
       return productById;
     } else {
-      console.log('El producto con ese Id no existe');
-      return null; // Devolvemos null para indicar que el producto no se encontró
+      throw new Error('El producto con ese Id no existe');
     }
   }
 
@@ -74,7 +100,7 @@ export class productManager {
 
     for (let i = 0; i < this.products.length; i++) {
       if (this.products[i].id === id) {
-        this.products[i] = { id, ...updatedProduct };
+        this.products[i] = { ...this.products[i], ...updatedProduct };
         productFound = true;
         break;
       }
@@ -83,12 +109,12 @@ export class productManager {
     if (productFound) {
       try {
         await this.saveProducts();
-        console.log('El producto con ese Id fue actualizado');
+        console.log(`El producto con el Id = ${id} fue actualizado`);
       } catch (error) {
         console.error('Error al actualizar producto:', error);
       }
     } else {
-      console.log('El producto con ese Id no existe');
+      throw new error('El producto con ese Id no existe', error);
     }
   }
 
@@ -116,5 +142,5 @@ export class productManager {
   }
 }
 
-
+export default productManager;
 

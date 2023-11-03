@@ -1,7 +1,7 @@
 import express from 'express';
-import {productManager} from '../src/productManager.js';
+import productManager from '../src/productManager.js';
 
-export const productRouter = express.Router();
+const productRouter = express.Router();
 const manager = new productManager('../data/products.json');
 
 // Ruta raíz GET /api/products
@@ -16,7 +16,7 @@ productRouter.get('/', async (req, res) => {
       res.json(products);
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los productos' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -26,13 +26,9 @@ productRouter.get('/:pid', async (req, res) => {
     const productId = parseInt(req.params.pid);
     const product = await manager.getProductById(productId);
 
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el producto' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -43,7 +39,7 @@ productRouter.post('/', async (req, res) => {
     const product = await manager.addProduct(newProduct);
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error al agregar el producto' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -70,3 +66,4 @@ productRouter.delete('/:pid', async (req, res) => {
   }
 });
 
+export default productRouter;
