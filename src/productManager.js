@@ -16,9 +16,9 @@ class productManager {
       const maxId = this.products.reduce((max, product) => (product.id > max ? product.id : max), 0);
       this.nextId = maxId + 1;
       console.log('El proximo producto que se agregue tendra el id: ' + this.nextId);
-
+      
       if (this.products.length > 0) {
-        console.log('Hay productos cargados');
+        console.log(`Hay ${this.products.length} productos cargados en la App`);
       } else {
         console.log('No hay productos cargados');
       }

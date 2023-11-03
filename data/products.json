@@ -27,9 +27,9 @@
   },
   {
     "id": 3,
-    "title": "Producto de prueba 1",
+    "title": "Producto de prueba 3 actualizado",
     "description": "Este es un producto de prueba",
-    "code": "p001",
+    "code": "p003",
     "price": 50,
     "status": true,
     "stock": 10,
@@ -40,9 +40,9 @@
   },
   {
     "id": 4,
-    "title": "Producto de prueba 1",
+    "title": "Producto de prueba 4 actualizado",
     "description": "Este es un producto de prueba",
-    "code": "p001",
+    "code": "p004",
     "price": 50,
     "status": true,
     "stock": 10,
