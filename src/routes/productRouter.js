@@ -1,8 +1,8 @@
 import express from 'express';
-import productManager from '../src/productManager.js';
+import productManager from '../productManager.js';
 
 const productRouter = express.Router();
-const manager = new productManager('./data/products.json');
+const manager = new productManager('./src/data/products.json');
 
 // Ruta raíz GET /api/products
 productRouter.get('/', async (req, res) => {
