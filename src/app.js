@@ -1,10 +1,13 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
+import {Server} from "socket.io";
+
 import productRouter  from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import viewsRouter from './routes/views.router.js';
-
+import realTimeProducts from './routes/realtimeproducts.router.js';
+import homeRouter from './routes/homeRouter.js';
 
 const app = express();
 const port = 8080;
@@ -23,7 +26,10 @@ app.use(express.static(__dirname + '/public')); // Configurar Express para servi
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/', viewsRouter);
+app.use('/home', homeRouter);
+app.use('/realtimeproducts', realTimeProducts);
 
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
   console.log(`Servidor Express escuchando en http://localhost:${port}`);
 });
+const io = new Server(httpServer)
