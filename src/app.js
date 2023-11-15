@@ -1,6 +1,7 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
+import { createServer } from 'http';
 import {Server} from "socket.io";
 
 import productRouter  from './routes/productRouter.js';
@@ -29,7 +30,15 @@ app.use('/', viewsRouter);
 app.use('/home', homeRouter);
 app.use('/realtimeproducts', realTimeProducts);
 
-const httpServer = app.listen(port, () => {
+const httpServer = createServer(app); 
+httpServer.listen(port, () => {
   console.log(`Servidor Express escuchando en http://localhost:${port}`);
 });
-const io = new Server(httpServer)
+
+const socketServer = new Server(httpServer);
+
+export { socketServer as io }
+
+
+
+

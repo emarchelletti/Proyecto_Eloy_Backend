@@ -1,5 +1,4 @@
 // El archivo utils.js funciona como una libreria propia del proyecto
-import multer from 'multer';
 import {fileURLToPath} from 'url'; // Importamos el metodo que levanta la url en la que estamos trababajando
 import { dirname } from 'path'; // Importamos el metodo que muestra la ruta del archivo como direccion url
 

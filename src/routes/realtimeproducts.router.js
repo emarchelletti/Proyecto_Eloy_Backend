@@ -3,6 +3,7 @@ import { readFile } from 'fs/promises';
 
 const realTimeProducts = express.Router();
 
+
 realTimeProducts.get('/', async (req, res) => {
     try {
         const data = await readFile('./src/data/products.json', 'utf8');
@@ -16,4 +17,6 @@ realTimeProducts.get('/', async (req, res) => {
 });
 
 
+
 export default realTimeProducts;
+
