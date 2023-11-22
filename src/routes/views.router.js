@@ -1,11 +1,10 @@
 import express from 'express';
 import { readFile } from 'fs/promises';
-import { io } from '../app.js';
-import productManager from '../productManager.js';
 
 const viewsRouter = express.Router();
 const homeRouter = express.Router();
 const realTimeProducts = express.Router();
+const chatRouter = express.Router();
 
 // Ruta para manejar la solicitud de la página de inicio
 viewsRouter.get('/', (req, res) => {
@@ -27,8 +26,6 @@ homeRouter.get('/', async (req, res) => {
   }
 });
 
-
-
 // Ruta para manejar la solicitud de la página /realtimeproducts
 realTimeProducts.get('/', async (req, res) => {
     try {
@@ -42,8 +39,9 @@ realTimeProducts.get('/', async (req, res) => {
     }
 });
 
+// Ruta para manejar la solicitud de la página /chat
+chatRouter.get('/', (req, res) => {
+  res.render('chat');
+});
 
-
-
-export { viewsRouter, homeRouter, realTimeProducts };
-
+export { viewsRouter, homeRouter, realTimeProducts, chatRouter};
