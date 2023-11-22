@@ -10,7 +10,7 @@ homeRouter.get('/', async (req, res) => {
         const products = JSON.parse(data);
 
         // Renderiza la vista home.handlebars y pasa los productos
-        res.render('layouts/home', { products });
+        res.render('home', { products });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error al cargar los productos.');

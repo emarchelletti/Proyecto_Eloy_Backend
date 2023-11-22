@@ -6,15 +6,18 @@ import {Server} from "socket.io";
 
 import productRouter  from './routes/productRouter.js';
 import cartRouter from './routes/cartRouter.js';
-import viewsRouter from './routes/views.router.js';
-import realTimeProducts from './routes/realtimeproducts.router.js';
-import homeRouter from './routes/homeRouter.js';
+import {viewsRouter,homeRouter,realTimeProducts} from './routes/views.router.js';
 
 const app = express();
 const port = 8080;
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 
+io.on('connection', (socket) => {
+  console.log('Cliente conectado a través de WebSocket');  
+});
 
-
+// HANDLEBARS
 app.engine('handlebars', handlebars.engine()); // Se establece Handlebars como el motor de plantillas.
 app.set('views',`${__dirname}/views`); // Se indica el directorio donde se encuentran las plantillas.
 app.set('view engine', 'handlebars'); //Se establece el motor de vista como 'handlebars'.
@@ -30,14 +33,11 @@ app.use('/', viewsRouter);
 app.use('/home', homeRouter);
 app.use('/realtimeproducts', realTimeProducts);
 
-const httpServer = createServer(app); 
 httpServer.listen(port, () => {
   console.log(`Servidor Express escuchando en http://localhost:${port}`);
 });
 
-const socketServer = new Server(httpServer);
-
-export { socketServer as io }
+export { app, io };
 
 
 
