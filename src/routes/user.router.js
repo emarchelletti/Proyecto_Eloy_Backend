@@ -1,6 +1,5 @@
-import express from 'express';
+import express from "express";
 import { userModel } from "../dao/models/user.model.js";
-
 
 const userRouter = express.Router();
 
@@ -59,4 +58,4 @@ userRouter.delete("/:uid", async (req, res) => {
   res.send({ status: "success", payload: result });
 });
 
-export default userRouter
+export default userRouter;
