@@ -64,7 +64,7 @@ httpServer.listen(port, () => {
 });
 
 
-const uri = 'mongodb+srv://emarchelletti:EqGFvoL20RkPGuIc@ecommerce.iozfcpp.mongodb.net/?retryWrites=true&w=majority'
+const uri = 'mongodb+srv://emarchelletti:EqGFvoL20RkPGuIc@ecommerce.iozfcpp.mongodb.net/ecommerce?retryWrites=true&w=majority'
 mongoose
   .connect(uri, {})
   .then((res) => {
