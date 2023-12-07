@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 //import productRouterFs from './routes/productRouterFs.js';   PRODUCT ROUTER CON FS
 //import cartRouter from './routes/cartRouterFs.js'; CART ROUTER CON FS
-import { viewsRouter, homeRouter, realTimeProducts, chatRouter } from './routes/views.router.js';
+import { viewsRouter, homeRouter, realTimeProducts, chatRouter, productsViewRouter, cartViewRouter } from './routes/views.router.js';
 import userRouter from './routes/user.router.js';
 import messageRouter from './routes/messages.router.js';
 import productRouter from './routes/product.router.js';
@@ -57,6 +57,8 @@ app.use('/home', homeRouter);
 app.use('/realtimeproducts', realTimeProducts);
 app.use('/chat', chatRouter);
 app.use('/messages', messageRouter);
+app.use('/products', productsViewRouter);
+app.use('/carts', cartViewRouter)
 
 
 httpServer.listen(port, () => {

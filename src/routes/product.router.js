@@ -1,23 +1,14 @@
-import express from 'express';
-import Product from '../dao/models/product.model.js';
+import express from "express";
+import Product from "../daos/models/product.model.js";
 
 const router = express.Router();
 
-// Obtener todos los productos
-// router.get('/', async (req, res) => {
-//   try {
-//     const productos = await Product.find();
-//     res.json(productos);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-router.get('/', async (req, res) => {
-  const { limit = 10, page = 1, sort, query, available} = req.query;
+router.get("/", async (req, res) => {
+  const { limit = 10, page = 1, sort, query, available } = req.query;
   const queryOptions = {};
 
   if (query) {
-    queryOptions.category = { $regex: query, $options: 'i' };
+    queryOptions.category = { $regex: query, $options: "i" };
   }
 
   if (available) {
@@ -29,7 +20,7 @@ router.get('/', async (req, res) => {
     let totalPages = Math.ceil(totalCount / limit); //se calcula dividiendo totalCount entre el límite (limit) de productos por página, redondeando hacia arriba con Math.ceil(). Esto determina cuántas páginas habrá en total.
 
     const result = {
-      status: 'success',
+      status: "success",
       payload: null,
       totalPages,
       prevPage: null,
@@ -44,22 +35,26 @@ router.get('/', async (req, res) => {
     if (page < totalPages) {
       result.hasNextPage = true;
       result.nextPage = parseInt(page) + 1;
-      result.nextLink = `/products?limit=${limit}&page=${result.nextPage}&sort=${sort || ''}&query=${query || ''}`;
+      result.nextLink = `/products?limit=${limit}&page=${
+        result.nextPage
+      }&sort=${sort || ""}&query=${query || ""}`;
     }
 
     if (page > 1) {
       result.hasPrevPage = true;
       result.prevPage = parseInt(page) - 1;
-      result.prevLink = `/products?limit=${limit}&page=${result.prevPage}&sort=${sort || ''}&query=${query || ''}`;
+      result.prevLink = `/products?limit=${limit}&page=${
+        result.prevPage
+      }&sort=${sort || ""}&query=${query || ""}`;
     }
 
     let products;
-    if (sort === 'asc') {
+    if (sort === "asc") {
       products = await Product.find(queryOptions)
         .sort({ price: 1 })
         .limit(parseInt(limit))
         .skip(parseInt(limit) * (page - 1));
-    } else if (sort === 'desc') {
+    } else if (sort === "desc") {
       products = await Product.find(queryOptions)
         .sort({ price: -1 })
         .limit(parseInt(limit))
@@ -74,17 +69,16 @@ router.get('/', async (req, res) => {
     res.json(result);
     console.log(`Se realizo una consulta a la base de datos de "Products"`);
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    res.status(500).json({ status: "error", message: error.message });
   }
 });
 
-
 // Obtener un producto por ID
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const producto = await Product.findById(req.params.id);
     if (!producto) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
+      return res.status(404).json({ message: "Producto no encontrado" });
     }
     res.json(producto);
   } catch (error) {
@@ -93,7 +87,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Agregar un nuevo producto
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const product = new Product(req.body);
   try {
     const newProduct = await product.save();
@@ -105,12 +99,13 @@ router.post('/', async (req, res) => {
 });
 
 // Actualizar un producto por ID
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     if (!product) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
-      
+      return res.status(404).json({ message: "Producto no encontrado" });
     }
     res.json(product);
     console.log(`Se actualizo el producto ${product.title}`);
@@ -120,13 +115,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // Eliminar un producto por ID
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const producto = await Product.findByIdAndDelete(req.params.id);
     if (!producto) {
-      return res.status(404).json({ message: 'Producto no encontrado' });
+      return res.status(404).json({ message: "Producto no encontrado" });
     }
-    res.json({ message: 'Producto eliminado exitosamente' });
+    res.json({ message: "Producto eliminado exitosamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

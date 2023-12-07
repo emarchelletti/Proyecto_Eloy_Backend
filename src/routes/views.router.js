@@ -1,10 +1,14 @@
 import express from 'express';
 import { readFile } from 'fs/promises';
+import Product from '../daos/models/product.model.js';
+import Cart from '../daos/models/cart.model.js';
 
 const viewsRouter = express.Router();
 const homeRouter = express.Router();
 const realTimeProducts = express.Router();
 const chatRouter = express.Router();
+const productsViewRouter = express.Router();
+const cartViewRouter = express.Router();
 
 // Ruta para manejar la solicitud de la página de inicio
 viewsRouter.get('/', (req, res) => {
@@ -44,4 +48,44 @@ chatRouter.get('/', (req, res) => {
   res.render('chat');
 });
 
-export { viewsRouter, homeRouter, realTimeProducts, chatRouter};
+//Ruta para mostrar el listado de productos en la db
+productsViewRouter.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10; // Cantidad de productos por página
+
+  try {
+    const result = await Product.paginate({}, { page, limit, lean:true });
+    console.log(result);
+    const totalPages = result.totalPages;
+    const currentPage = result.page;
+
+    res.render('products', { 
+      products: result.docs,
+      totalPages,
+      currentPage
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener los productos" });
+  }
+});
+
+// Ruta para mostrar un carrito específico
+cartViewRouter.get('/:cid', async (req, res) => {
+  const cartId = req.params.cid;
+
+  try {
+    const cart = await Cart.findById(cartId).populate('products.product').lean();
+    console.log(cart);
+    if (!cart) {
+      return res.status(404).json({ error: 'Carrito no encontrado' });
+    }
+
+    res.render('cart', { cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el carrito' });
+  }
+});
+
+export { viewsRouter, homeRouter, realTimeProducts, chatRouter, productsViewRouter, cartViewRouter};
