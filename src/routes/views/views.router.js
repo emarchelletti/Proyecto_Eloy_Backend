@@ -1,7 +1,7 @@
 import express from 'express';
 import { readFile } from 'fs/promises';
-import Product from '../daos/models/product.model.js';
-import Cart from '../daos/models/cart.model.js';
+import Product from '../../dao/models/product.model.js';
+import Cart from '../../dao/models/cart.model.js';
 
 const viewsRouter = express.Router();
 const homeRouter = express.Router();
