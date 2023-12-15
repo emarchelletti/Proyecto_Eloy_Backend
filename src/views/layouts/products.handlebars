@@ -1,23 +1,30 @@
-<h1>LISTADO DE PRODUCTOS</h1>
-  <div class="product-container">
-    {{#each products}}
-      <div class="product">
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <p>Precio: {{this.price}}</p>
-        <p>Categoría: {{this.category}}</p>
-        <!-- Botón para ver detalles -->
-        <a href="/products/{{this._id}}">Ver detalles</a>
-        <!-- Botón para agregar al carrito -->
-        <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
-          <button type="submit">Agregar al carrito</button>
-        </form>
-      </div>
-    {{/each}}
-  </div>
+{{#if user}}
+  <h1>Bienvenido, {{user.first_name}} !</h1>
+  <h2>Tu rol es: "{{role}}"</h2>
+  <a href="/profile"><button>Ir al Perfil</button></a>
+  <form action="/api/sessions/logout/" method="post">
+    <button type="submit">Cerrar sesion</button>
+  </form>
 
+{{/if}}
 
-
+<h2>LISTADO DE PRODUCTOS</h2>
+<div class="product-container">
+  {{#each products}}
+    <div class="product">
+      <h3>{{this.title}}</h3>
+      <p>{{this.description}}</p>
+      <p>Precio: {{this.price}}</p>
+      <p>Categoría: {{this.category}}</p>
+      <!-- Botón para ver detalles -->
+      <a href="/products/{{this._id}}">Ver detalles</a>
+      <!-- Botón para agregar al carrito -->
+      <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
+        <button type="submit">Agregar al carrito</button>
+      </form>
+    </div>
+  {{/each}}
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/js/products.js"></script>

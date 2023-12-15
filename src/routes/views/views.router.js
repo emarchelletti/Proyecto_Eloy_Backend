@@ -55,12 +55,13 @@ productsViewRouter.get('/', async (req, res) => {
 
   try {
     const result = await Product.paginate({}, { page, limit, lean:true });
-    console.log(result);
     const totalPages = result.totalPages;
     const currentPage = result.page;
 
     res.render('index', { layout: "products",
       products: result.docs,
+      user: req.session,
+      role: req.session.role,
       totalPages,
       currentPage
     });
