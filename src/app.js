@@ -23,7 +23,7 @@ import {
 } from "./routes/views/views.router.js";
 import userRouter from "./routes/views/user.router.js";
 import messageRouter from "./routes/views/messages.router.js";
-import indexRouter from "./routes/views/index.router.js"
+import registerRouter from "./routes/views/register.router.js"
 import loginRouter from './routes/views/login.router.js';
 import profileRouter from './routes/views/profile.router.js';
 
@@ -101,8 +101,8 @@ app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
 app.use('/api/sessions', sessionsApiRouter);
 
-app.use("/", viewsRouter);
-app.use('/index', indexRouter);
+app.use("/", loginRouter);
+app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/profile', profileRouter);
 app.use('/logout', sessionsApiRouter);

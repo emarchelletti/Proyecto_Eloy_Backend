@@ -6,8 +6,8 @@ export const registerUser = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
     const user = new userModel({ first_name, last_name, email, age, password });
     await user.save();
-    req.session.name = name;
-    req.session.email = email;
+    req.session.name = user.first_name;
+    req.session.email = user.email;
     res.redirect("/profile");
   } catch (error) {
     console.log(error);
@@ -18,13 +18,16 @@ export const registerUser = async (req, res) => {
 // Autentica a un usuario y almacena la información en la sesión.
 export const loginUser = async (req, res) => {
   try {
-    const { first_name, last_name, email, age, password } = req.body;
-    const user = await userModel.findOne({first_name, email, password});
+    const { email, password } = req.body;
+    const user = await userModel.findOne({email, password});
     if (user) {
       req.session.first_name = user.first_name;
+      req.session.last_name = user.last_name;
       req.session.email = user.email;
-      res.redirect("/profile");
+      req.session.age = user.age;
+      res.redirect("/products");
     } else {
+      console.log("usuario o contraseña incorrectos");
       res.redirect("/");
     }
   } catch (error) {

@@ -12,7 +12,7 @@ const cartViewRouter = express.Router();
 
 // Ruta para manejar la solicitud de la página de inicio
 viewsRouter.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {layout: "login"} );
 });
 
 // Ruta para manejar la solicitud de la página /home
@@ -59,7 +59,7 @@ productsViewRouter.get('/', async (req, res) => {
     const totalPages = result.totalPages;
     const currentPage = result.page;
 
-    res.render('products', { 
+    res.render('index', { layout: "products",
       products: result.docs,
       totalPages,
       currentPage

@@ -1,3 +1,3 @@
-console.log('Cliente conectado');
+console.log('Cliente conectado a products');
 
 const socket = io();
