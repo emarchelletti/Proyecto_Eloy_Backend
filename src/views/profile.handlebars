@@ -1,9 +1,9 @@
 <h2>PERFIL DEL USUARIO</h2>
 {{#if user}}
-    <p>Bienvenido, {{user.first_name}} {{user.last_name}}!</p>
+    <p>Bienvenido, {{user.name}}!</p>
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
-    <a href="/logout" title="logout">Logout</a>
+  <button onclick="window.location.href='/logout'">Cerrar Sesión</button>
 {{else}}
     <p>El usuario no esta logueado</p>
 {{/if}}

@@ -3,7 +3,10 @@ import { readFile } from 'fs/promises';
 import Product from '../../dao/models/product.model.js';
 import Cart from '../../dao/models/cart.model.js';
 
-const viewsRouter = express.Router();
+const indexRouter = express.Router();
+const loginRouter = express.Router();
+const profileRouter = express.Router();
+const registerRouter = express.Router();
 const homeRouter = express.Router();
 const realTimeProducts = express.Router();
 const chatRouter = express.Router();
@@ -11,10 +14,35 @@ const productsViewRouter = express.Router();
 const cartViewRouter = express.Router();
 
 // Ruta para manejar la solicitud de la página de inicio
-viewsRouter.get('/', (req, res) => {
-  res.render('index', {layout: "login"} );
+indexRouter.get('/', (req, res) => {
+  res.render('index');
 });
 
+// Ruta para manejar el login
+loginRouter.get("/", (req, res) => {
+  let data = {
+    title: "Inicio de sesión",
+    actionLogin: "/api/sessions/login/",
+  };
+  res.render("login", data);
+});
+
+// Ruta para manejar el profile
+profileRouter.get("/", (req, res) => {
+  let data = {
+    user: req.session,
+  };
+  res.render("profile", data);
+});
+
+// Ruta para manejar el Registro
+registerRouter.get("/", (req, res) => {
+  let data = {
+    title_register: "Registro",
+    actionRegister: "/api/sessions/register/",
+  };
+  res.render("register", data);
+});
 // Ruta para manejar la solicitud de la página /home
 homeRouter.get('/', async (req, res) => {
   try {
@@ -59,7 +87,7 @@ productsViewRouter.get('/', async (req, res) => {
     const totalPages = result.totalPages;
     const currentPage = result.page;
 
-    res.render('index', { layout: "products",
+    res.render('products', {
       products: result.docs,
       totalPages,
       currentPage
@@ -88,4 +116,4 @@ cartViewRouter.get('/:cid', async (req, res) => {
   }
 });
 
-export { viewsRouter, homeRouter, realTimeProducts, chatRouter, productsViewRouter, cartViewRouter};
+export { indexRouter, loginRouter, profileRouter, registerRouter, homeRouter, realTimeProducts, chatRouter, productsViewRouter, cartViewRouter};

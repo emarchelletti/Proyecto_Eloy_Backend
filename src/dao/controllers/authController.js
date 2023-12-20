@@ -8,10 +8,10 @@ export const registerUser = async (req, res) => {
     await user.save();
     req.session.name = user.first_name;
     req.session.email = user.email;
+    req.session.age = user.age;
     res.redirect("/profile");
   } catch (error) {
-    console.log(error);
-    res.redirect("/");
+    console.log('Error en el registro de nuevo user');
   }
 };
 

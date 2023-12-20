@@ -1,31 +1,31 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import __dirname from "./utils.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
-
+import 'dotenv/config'
+import __dirname from "./utils.js";
 // Routes FS (fuera de uso por el momento)
 //import productRouterFs from './routes/productRouterFs.js';   PRODUCT ROUTER CON FS
 //import cartRouter from './routes/cartRouterFs.js'; CART ROUTER CON FS
 
 // Routes Views
 import {
-  viewsRouter,
+  indexRouter,
   homeRouter,
   realTimeProducts,
   chatRouter,
   productsViewRouter,
   cartViewRouter,
+  loginRouter,
+  profileRouter,
+  registerRouter,
 } from "./routes/views/views.router.js";
 import userRouter from "./routes/views/user.router.js";
 import messageRouter from "./routes/views/messages.router.js";
-import registerRouter from "./routes/views/register.router.js"
-import loginRouter from './routes/views/login.router.js';
-import profileRouter from './routes/views/profile.router.js';
 
 // Routes API
 import productRouter from "./routes/api/product.router.js";
@@ -71,10 +71,8 @@ app.use(express.static(__dirname + "/public")); // Configurar Express para servi
 app.use(cookieParser());
 
 // Conexión a la base de datos MongoDB
-const url =
-  "mongodb+srv://emarchelletti:EqGFvoL20RkPGuIc@ecommerce.iozfcpp.mongodb.net/ecommerce?retryWrites=true&w=majority";
 mongoose
-  .connect(url, {})
+  .connect(process.env.mongo, {})
   .then((res) => {
     console.log("Database connected");
   })
@@ -89,21 +87,22 @@ app.use(
     resave: false, // Evitar que se guarde la sesión en cada solicitud
     saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
     store: MongoStore.create({
-      mongoUrl: url,
+      mongoUrl: process.env.mongo,
       ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
     }),
   })
 );
 
-// Usar los routers
+// Api Routes
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", userRouter);
 app.use('/api/sessions', sessionsApiRouter);
 
-app.use("/", loginRouter);
-app.use('/register', registerRouter);
+// Views Routes
+app.use("/",indexRouter);
 app.use('/login', loginRouter);
+app.use('/register', registerRouter);
 app.use('/profile', profileRouter);
 app.use('/logout', sessionsApiRouter);
 app.use("/carts", cartViewRouter);
