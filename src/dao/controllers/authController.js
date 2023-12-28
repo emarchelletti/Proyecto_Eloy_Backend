@@ -1,17 +1,30 @@
 import userModel from "../models/user.model.js";
+import { createHash, isValidPassword } from "../../utils.js";
+
 
 // Registra a un nuevo usuario.
 export const registerUser = async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
-    const user = new userModel({ first_name, last_name, email, age, password });
+    if (!first_name || !last_name || !email || !age || !password)
+      return res
+        .status(401)
+        .send({ status: "Error", error: "Incomplete values" });
+
+    const user = new userModel({
+      first_name,
+      last_name,
+      email,
+      age,
+      password: createHash(password),
+    });
     await user.save();
-    req.session.name = user.first_name;
-    req.session.email = user.email;
-    req.session.age = user.age;
+    delete user.password;
+
+    req.session.user = user;
     res.redirect("/profile");
   } catch (error) {
-    console.log('Error en el registro de nuevo user');
+    console.log("Error en el registro de nuevo user");
   }
 };
 
@@ -19,17 +32,27 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userModel.findOne({email, password});
-    if (user) {
-      req.session.first_name = user.first_name;
-      req.session.last_name = user.last_name;
-      req.session.email = user.email;
-      req.session.age = user.age;
-      res.redirect("/products");
-    } else {
-      console.log("usuario o contraseña incorrectos");
-      res.redirect("/");
-    }
+    const user = await userModel.findOne(
+      { email },
+      //{ email: 1, name: 1, password: 1 }
+    );
+
+    if (!user)
+      return res.status(401).send({
+        status: "Error",
+        error: "Usuario y/o contraseña incorrecta 1",
+      });
+
+    if (!isValidPassword(user, password))
+      return res.status(401).send({
+        status: "Error",
+        error: "Usuario y/o contraseña incorrecta 2",
+      });
+
+    delete user.password;
+    console.log(user)
+    req.session.user = user;
+    res.redirect("/profile");
   } catch (error) {
     console.log("Error, credenciales invalidas", error);
     res.redirect("/error");

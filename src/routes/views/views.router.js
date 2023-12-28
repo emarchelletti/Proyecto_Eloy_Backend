@@ -30,7 +30,7 @@ loginRouter.get("/", (req, res) => {
 // Ruta para manejar el profile
 profileRouter.get("/", (req, res) => {
   let data = {
-    user: req.session,
+    user: req.session.user,
   };
   res.render("profile", data);
 });

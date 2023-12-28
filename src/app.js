@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
-import 'dotenv/config'
+import 'dotenv/config';
 import __dirname from "./utils.js";
 // Routes FS (fuera de uso por el momento)
 //import productRouterFs from './routes/productRouterFs.js';   PRODUCT ROUTER CON FS
@@ -81,8 +81,7 @@ mongoose
   });
 
 // Configuración de middleware para manejar sesiones usando connect-mongo
-app.use(
-  session({
+app.use(session({
     secret: "CoderSecret", // Clave secreta para firmar las cookies de sesión
     resave: false, // Evitar que se guarde la sesión en cada solicitud
     saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
