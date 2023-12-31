@@ -31,6 +31,8 @@ loginRouter.get("/", (req, res) => {
 profileRouter.get("/", (req, res) => {
   let data = {
     user: req.session.user,
+    title: "Perfil del usuario",
+    actionLogin: "/api/sessions/logout/",
   };
   res.render("profile", data);
 });
@@ -43,6 +45,7 @@ registerRouter.get("/", (req, res) => {
   };
   res.render("register", data);
 });
+
 // Ruta para manejar la solicitud de la página /home
 homeRouter.get('/', async (req, res) => {
   try {

@@ -21,10 +21,11 @@ export const registerUser = async (req, res) => {
     await user.save();
     delete user.password;
 
+    console.log('Se registro un nuevo usuario');
     req.session.user = user;
     res.redirect("/profile");
   } catch (error) {
-    console.log("Error en el registro de nuevo user");
+    console.log("Error en el registro de nuevo usuario");
   }
 };
 
@@ -34,13 +35,12 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.findOne(
       { email },
-      //{ email: 1, name: 1, password: 1 }
     );
 
     if (!user)
       return res.status(401).send({
         status: "Error",
-        error: "Usuario y/o contraseña incorrecta 1",
+        error: "No existe usuario con ese mail",
       });
 
     if (!isValidPassword(user, password))
@@ -50,7 +50,7 @@ export const loginUser = async (req, res) => {
       });
 
     delete user.password;
-    console.log(user)
+    console.log('Se logueo un usuario')
     req.session.user = user;
     res.redirect("/profile");
   } catch (error) {
@@ -71,10 +71,12 @@ export const logOutUser = async (req, res) => {
           console.error("Error al cerrar la sesión", err);
           res.status(500).send("Error al cerrar la sesión");
         } else {
+          console.log('Se cerro la sesion del usuario');
           res.redirect("/login");
         }
       });
     } else {
+      console.log('No cerro la sesion');
       res.redirect("/login");
     }
   } catch (error) {

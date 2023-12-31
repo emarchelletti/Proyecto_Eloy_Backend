@@ -13,19 +13,4 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
-
-// Configurar la carpeta y el nombre del archivo
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, './src/public/img'); // Carpeta donde se guardarán los archivos
-//   },
-//   filename: (req, file, cb) => {
-//     const timestamp = Date.now();
-//     const originalname = file.originalname;
-//     const filename = `${timestamp}-Coder`;
-//     cb(null, filename);
-//   },
-// });
-
-//export const uploader = multer({ storage });;
 export default __dirname;
