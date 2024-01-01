@@ -86,7 +86,11 @@ const initializePassport = () => {
             return done(null, false);
           }
 
-          if (!isValidPassword(user, password)) return done(null, false);
+          if (!isValidPassword(user, password))
+          {
+            console.log("Contraseña incorrecta");
+            return done(null, false);
+          } 
 
           return done(null, user);
         } catch (error) {
@@ -95,7 +99,7 @@ const initializePassport = () => {
       }
     )
   );
-  
+
   passport.serializeUser((user, done) => {
     console.log(user._id);
     done(null, user._id);

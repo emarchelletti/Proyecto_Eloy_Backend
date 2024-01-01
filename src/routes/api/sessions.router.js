@@ -21,7 +21,7 @@ router.post(
     if (!user)
       return res
         .status(400)
-        .send({ status: "Error", error: "Inalid Credentials" });
+        .send({ status: "Error", error: "Invalid Credentials" });
     delete user.password;
     req.session.user = user;
     res.redirect("/profile");
