@@ -27,7 +27,7 @@ import {
 // Routes API
 import productRouter from "./routes/api/product.router.js";
 import cartRouter from "./routes/api/cart.router.js";
-import sessionsApiRouter from './routes/api/sessions.router.js';
+import sessionsRouter from './routes/api/sessions.router.js';
 
 
 const app = express();
@@ -98,14 +98,13 @@ app.use(passport.session());
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 // app.use("/api/users", userRouter); ---- Pendiente de hacer
-app.use('/api/sessions', sessionsApiRouter);
+app.use('/api/sessions', sessionsRouter);
 
 // Views Routes
 app.use("/",indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/profile', profileRouter);
-app.use('/logout', sessionsApiRouter);
 app.use("/carts", cartViewRouter);
 app.use("/products", productsViewRouter);
 app.use("/realtimeproducts", realTimeProducts);
