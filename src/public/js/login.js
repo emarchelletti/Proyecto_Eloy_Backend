@@ -14,6 +14,8 @@ form.addEventListener("submit", (e) => {
   })
     .then((result) => result.json())
     .then((json) => {
+      console.log('Cookie =' + document.cookie)
       window.location.replace("/current");
+      
     });
 });

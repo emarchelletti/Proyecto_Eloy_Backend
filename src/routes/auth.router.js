@@ -44,13 +44,13 @@ router.post("/login", async (req, res) => {
     if (!user)
       return res.status(401).send({
         status: "Error",
-        error: "Usuario y/o contraseña incorrecta 1",
+        error: "No hay usuario registrado con ese mail",
       });
 
     if (!isValidPassword(user, password))
       return res.status(401).send({
         status: "Error",
-        error: "Usuario y/o contraseña incorrecta 2",
+        error: "Contraseña incorrecta",
       });
 
     delete user.password;
