@@ -1,12 +1,15 @@
 # Proyecto_Eloy_Backend
 
-Proyecto del curso Backend de CODERHOUSE
+7mo desafio entregable
 
-  
 
-*Desafio entregable Nro 6 "Refactor a nuestro login"*
+*"Reestructura de nuestro servidor"*
 
  
- - [x] Hasheo de contraseña utilizando bcrypt 
- - [x] Implementación de passport, tanto para register como para login
- - [x] Implementación de método de autenticación de GitHub a la vista de login
+
+ 1.  El proyecto debe contar con capas de routing, controlador, dao, con nuestras vistas bien separadas y con las responsabilidades correctamente delegadas.
+
+ 2. Además, mover del proyecto todas las partes importantes y comprometedoras en un archivo .env para poder leerlo bajo variables de entorno en un archivo config.js
+
+ 
+ 
