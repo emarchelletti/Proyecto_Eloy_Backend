@@ -1,15 +1,15 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import { createServer } from "http";
+//import { createServer } from "http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
-import 'dotenv/config';
+import "dotenv/config";
 import __dirname from "./utils.js";
 import passport from "passport";
-import initializePassport from './config/passport.config.js';
+import initializePassport from "./config/passport.config.js";
 
 // Routes Views
 import {
@@ -27,19 +27,28 @@ import {
 // Routes API
 import productRouter from "./routes/api/product.router.js";
 import cartRouter from "./routes/api/cart.router.js";
-import sessionsRouter from './routes/api/sessions.router.js';
-
+import sessionsRouter from "./routes/api/sessions.router.js";
+import userRouter from "./routes/api/users.router.js";
 
 const app = express();
 const port = 8080;
+const httpServer = app.listen(port, () => {
+  console.log(`Servidor Express escuchando en http://localhost:${port}`);
+});
 
-const httpServer = createServer(app);
 const io = new Server(httpServer);
 let messages = [];
+import productManager from "./dao/controllers/productManager.js";
 
 // Configuración de WEBSOCKETS
 io.on("connection", (socket) => {
+  const manager = new productManager("./src/dao/data/products.json");
   console.log("Cliente conectado a través de WebSocket");
+  // Ingreso de nuevo producto
+  socket.on("newProduct", (data) => {
+    manager.addProduct(data);
+    io.emit("updateProducts", data);
+  });
   // Boton 'Eliminar producto'
   socket.on("deleteProduct", (data) => {
     console.log(data);
@@ -69,7 +78,7 @@ app.use(cookieParser());
 
 // Conexión a la base de datos MongoDB
 mongoose
-  .connect(process.env.mongo, {})
+  .connect(process.env.MONGO_URL, {})
   .then((res) => {
     console.log("Database connected");
   })
@@ -78,12 +87,13 @@ mongoose
   });
 
 // Configuración de middleware para manejar sesiones usando connect-mongo
-app.use(session({
+app.use(
+  session({
     secret: "CoderSecret", // Clave secreta para firmar las cookies de sesión
     resave: false, // Evitar que se guarde la sesión en cada solicitud
     saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
     store: MongoStore.create({
-      mongoUrl: process.env.mongo,
+      mongoUrl: process.env.MONGO_URL,
       ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
     }),
   })
@@ -93,18 +103,17 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // Api Routes
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
-// app.use("/api/users", userRouter); ---- Pendiente de hacer
-app.use('/api/sessions', sessionsRouter);
+app.use("/api/users", userRouter);
+app.use("/api/sessions", sessionsRouter);
 
 // Views Routes
-app.use("/",indexRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
-app.use('/profile', profileRouter);
+app.use("/", indexRouter);
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
+app.use("/profile", profileRouter);
 app.use("/carts", cartViewRouter);
 app.use("/products", productsViewRouter);
 app.use("/realtimeproducts", realTimeProducts);
@@ -115,8 +124,4 @@ app.use("/chat", chatRouter);
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Algo salió mal!");
-});
-
-httpServer.listen(port, () => {
-  console.log(`Servidor Express escuchando en http://localhost:${port}`);
 });

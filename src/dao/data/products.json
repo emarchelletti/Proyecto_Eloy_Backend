@@ -50,5 +50,16 @@
     "thumbnails": [
       "imagen1.jpg"
     ]
+  },
+  {
+    "id": 5,
+    "title": "Prueba 3",
+    "description": "producto de prueba",
+    "code": "333",
+    "price": "5",
+    "status": true,
+    "stock": "1",
+    "category": "tuki",
+    "thumbnails": []
   }
 ]

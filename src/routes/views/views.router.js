@@ -64,7 +64,7 @@ homeRouter.get('/', async (req, res) => {
 // Ruta para manejar la solicitud de la página /realtimeproducts
 realTimeProducts.get('/', async (req, res) => {
     try {
-        const data = await readFile('./src/data/products.json', 'utf8');
+        const data = await readFile('./src/dao/data/products.json', 'utf8');
         const products = JSON.parse(data);
 
         res.render('realTimeProducts', { products });

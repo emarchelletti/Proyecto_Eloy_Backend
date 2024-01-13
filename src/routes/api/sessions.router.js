@@ -12,6 +12,12 @@ const router = express.Router();
 //router.post("/login", loginUser);
 router.post("/logout", logOutUser);
 
+router.get("/", async (req, res) => {
+  let activeSession = req.session;
+  res.json(activeSession);
+  console.log(`Se realizo una consulta a la base de datos de "Sessions"`);
+});
+
 // Login con passport
 router.post(
   "/login",
