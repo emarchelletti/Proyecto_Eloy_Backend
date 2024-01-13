@@ -69,7 +69,7 @@ app.use(cookieParser());
 
 // Conexión a la base de datos MongoDB
 mongoose
-  .connect(process.env.mongo, {})
+  .connect(process.env.MONGO_URL, {})
   .then((res) => {
     console.log("Database connected");
   })
@@ -83,7 +83,7 @@ app.use(session({
     resave: false, // Evitar que se guarde la sesión en cada solicitud
     saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
     store: MongoStore.create({
-      mongoUrl: process.env.mongo,
+      mongoUrl: process.env.MONGO_URL,
       ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
     }),
   })
