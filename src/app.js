@@ -8,7 +8,7 @@ import "dotenv/config";
 import __dirname from "./utils.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import configureSocketIO from "./socketConfig.js";
+import configureSocketIO from "./config/socketConfig.js";
 import configureRoutes from "./routes.js";
 
 // Server configuration

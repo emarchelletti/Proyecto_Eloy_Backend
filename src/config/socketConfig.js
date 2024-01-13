@@ -1,6 +1,6 @@
 // Configuración de WEBSOCKETS para chat y /realtimeproducts
 import { Server } from "socket.io";
-import productManager from "./dao/controllers/productManager.js";
+import productManager from "../dao/controllers/productManager.js";
 
 const configureSocketIO = (httpServer) => {
   const io = new Server(httpServer);
