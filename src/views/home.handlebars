@@ -1,4 +1,6 @@
-<div>
-    <p id="result"></p>
-</div>
-<script src="/js/profile.js"></script>
+<h1>Lista de Productos JSON</h1>
+<ul>
+    {{#each products}}
+    <li>{{this.title}} - Precio: ${{this.price}}</li>
+    {{/each}}
+</ul>
