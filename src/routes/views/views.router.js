@@ -50,7 +50,7 @@ registerRouter.get("/", (req, res) => {
 homeRouter.get('/', async (req, res) => {
   try {
     // Lee los productos desde products.json de manera asíncrona
-    const data = await readFile('./src/data/products.json', 'utf8');
+    const data = await readFile('./src/dao/data/products.json', 'utf8');
     const products = JSON.parse(data);
 
     // Renderiza la vista home.handlebars y pasa los productos
