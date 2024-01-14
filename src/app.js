@@ -4,22 +4,30 @@ import mongoose from "mongoose";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
-import "dotenv/config";
 import __dirname from "./utils.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import configureSocketIO from "./socketConfig.js";
+import configureSocketIO from "./config/socketio.config.js";
 import configureRoutes from "./routes.js";
+import config from "./config/server.config.js";
+import { db } from "./config/db.config.js";
+
+
 
 // Server configuration
 const app = express();
-const port = 8080;
-const httpServer = app.listen(port, () => {
-  console.log(`Servidor Express escuchando en http://localhost:${port}`);
-});
+const port = config.port;
+let httpServer = '';
 
-// Configuración de rutas
-configureRoutes(app);
+if (port) {
+    httpServer = app.listen(port, () => {
+    console.log(`Servidor iniciado en el puerto ${port} en modo ${config.mode}`);
+  });
+} else {
+  console.error("No hay variables de entorno configuradas");
+}
+
+
 
 // Configuración de WEBSOCKETS para chat y /realtimeproducts
 configureSocketIO(httpServer);
@@ -35,22 +43,15 @@ app.use(express.urlencoded({ extended: true })); // Middleware para analizar el 
 app.use(express.static(__dirname + "/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
 app.use(cookieParser());
 
-// Conexión a la base de datos MongoDB
-try {
-  await mongoose.connect(process.env.MONGO_URL, {});
-  console.log("Database connected");
-} catch (error) {
-  console.error("Error connecting to the database:", error);
-}
 
 // Configuración de middleware para manejar sesiones usando connect-mongo
 app.use(
   session({
-    secret: "CoderSecret", // Clave secreta para firmar las cookies de sesión
+    secret: process.env.KEYSECRET, // Clave secreta para firmar las cookies de sesión
     resave: false, // Evitar que se guarde la sesión en cada solicitud
     saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL,
+      mongoUrl: config.url,
       ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
     }),
   })
@@ -59,6 +60,9 @@ app.use(
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Configuración de rutas
+configureRoutes(app);
 
 // Manejo de errores
 app.use((err, req, res, next) => {
