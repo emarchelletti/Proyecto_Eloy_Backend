@@ -11,13 +11,18 @@ export const registerUser = async (req, res) => {
         .status(401)
         .send({ status: "Error", error: "Incomplete values" });
 
+    // Verificar si el correo electrónico es "admin@coder.com"
+    const isAdmin = email.toLowerCase() === 'admin@coder.com';
+
     const user = new userModel({
       first_name,
       last_name,
       email,
       age,
       password: createHash(password),
+      role: isAdmin ? 'admin' : 'user', 
     });
+    
     await user.save();
     delete user.password;
 

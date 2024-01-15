@@ -5,11 +5,9 @@ import { createHash, isValidPassword } from "../utils.js";
 import userModel from "../dao/models/user.model.js";
 import "dotenv/config.js";
 
-
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
-
   //Logica para el inicio de sesion con GitHub
   passport.use(
     "github",
@@ -26,16 +24,16 @@ const initializePassport = () => {
           if (!user) {
             let newUser = {
               first_name: profile._json.name,
-              last_name: '',
-              age: '',
+              last_name: "",
+              age: "",
               email: profile._json.email,
-              password: '',
+              password: "",
             };
             let result = await userModel.create(newUser);
             done(null, result);
           } else {
-            console.log('El usuario ya existe');
-            done(null, user); 
+            console.log("El usuario ya existe");
+            done(null, user);
           }
         } catch (error) {
           done(error);
@@ -50,7 +48,7 @@ const initializePassport = () => {
     new LocalStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, email, password, done) => {
-        const { first_name, last_name, age,} = req.body;
+        const { first_name, last_name, age } = req.body;
 
         try {
           let user = await userModel.findOne({ email });
@@ -58,12 +56,16 @@ const initializePassport = () => {
             console.log("Usuario ya existe");
             return done(null, false);
           }
+
+          const isAdmin = email.toLowerCase() === 'admin@coder.com';
+
           const newUser = {
             first_name,
             last_name,
-            age,
             email,
+            age,
             password: createHash(password),
+            role: isAdmin ? "admin" : "user",
           };
           let result = await userModel.create(newUser);
           return done(null, result);
@@ -86,11 +88,10 @@ const initializePassport = () => {
             return done(null, false);
           }
 
-          if (!isValidPassword(user, password))
-          {
+          if (!isValidPassword(user, password)) {
             console.log("Contraseña incorrecta");
             return done(null, false);
-          } 
+          }
 
           return done(null, user);
         } catch (error) {
@@ -104,13 +105,11 @@ const initializePassport = () => {
     console.log(user._id);
     done(null, user._id);
   });
-  
+
   passport.deserializeUser(async (id, done) => {
     let user = await userModel.findById(id);
     done(null, user);
   });
 };
-
-
 
 export default initializePassport;

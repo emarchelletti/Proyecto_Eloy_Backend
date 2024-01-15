@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     },
     age : Number,
     password: String,
-    role: { type: String, default: "user"}   
+    role: String, 
 })
 
 const userModel = mongoose.model(userCollection, userSchema);

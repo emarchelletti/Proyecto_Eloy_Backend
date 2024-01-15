@@ -12,4 +12,4 @@
  2. Además, mover del proyecto todas las partes importantes y comprometedoras en un archivo .env para poder leerlo bajo variables de entorno en un archivo config.js
 
  
- 
+
