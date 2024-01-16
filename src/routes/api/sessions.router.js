@@ -3,7 +3,7 @@ import {
   registerUser,
   loginUser,
   logOutUser,
-} from "../../dao/controllers/authController.js";
+} from "../../controllers/authController.js";
 import passport from "passport";
 
 const router = express.Router();

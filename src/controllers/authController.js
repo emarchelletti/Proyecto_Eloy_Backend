@@ -1,5 +1,5 @@
-import userModel from "../models/user.model.js";
-import { createHash, isValidPassword } from "../../utils.js";
+import userModel from "../dao/models/user.model.js";
+import { createHash, isValidPassword } from "../utils.js";
 
 
 // Registra a un nuevo usuario.
