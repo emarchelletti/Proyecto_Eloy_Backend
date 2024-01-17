@@ -8,7 +8,7 @@ import __dirname from "./utils.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import configureSocketIO from "./config/socketio.config.js";
-import configureRoutes from "./routes.js";
+import configureRoutes from "./routes/routes.js";
 import config from "./config/server.config.js";
 import { db } from "./config/db.config.js";
 

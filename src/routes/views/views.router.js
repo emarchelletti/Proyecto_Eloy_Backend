@@ -41,7 +41,7 @@ profileRouter.get("/", (req, res) => {
 registerRouter.get("/", (req, res) => {
   let data = {
     title_register: "Registro",
-    actionRegister: "/api/sessions/register/",
+    actionRegister: "/api/users/register/",
   };
   res.render("register", data);
 });

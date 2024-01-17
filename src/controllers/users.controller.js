@@ -1,6 +1,19 @@
 import userModel from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 
+// Muestra todos los usuarios en la base de datos
+export const showAllUsers = async (req, res) => {
+  let users = await userModel.find();
+  res.json(users);
+  console.log(`Se realizo una consulta a la base de datos de "Usuarios"`);
+};
+
+// Muestra las sesiones activas
+export const showActiveSessions = async (req, res) => {
+  let activeSession = req.session;
+  res.json(activeSession);
+  console.log(`Se realizo una consulta a la base de datos de "Sessions"`);
+}
 
 // Registra a un nuevo usuario.
 export const registerUser = async (req, res) => {
@@ -12,7 +25,7 @@ export const registerUser = async (req, res) => {
         .send({ status: "Error", error: "Incomplete values" });
 
     // Verificar si el correo electrónico es "admin@coder.com"
-    const isAdmin = email.toLowerCase() === 'admin@coder.com';
+    const isAdmin = email.toLowerCase() === "admin@coder.com";
 
     const user = new userModel({
       first_name,
@@ -20,13 +33,13 @@ export const registerUser = async (req, res) => {
       email,
       age,
       password: createHash(password),
-      role: isAdmin ? 'admin' : 'user', 
+      role: isAdmin ? "admin" : "user",
     });
-    
+
     await user.save();
     delete user.password;
 
-    console.log('Se registro un nuevo usuario');
+    console.log("Se registro un nuevo usuario");
     req.session.user = user;
     res.redirect("/profile");
   } catch (error) {
@@ -38,9 +51,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userModel.findOne(
-      { email },
-    );
+    const user = await userModel.findOne({ email });
 
     if (!user)
       return res.status(401).send({
@@ -55,7 +66,7 @@ export const loginUser = async (req, res) => {
       });
 
     delete user.password;
-    console.log('Se logueo un usuario')
+    console.log("Se logueo un usuario");
     req.session.user = user;
     res.redirect("/profile");
   } catch (error) {
@@ -76,16 +87,36 @@ export const logOutUser = async (req, res) => {
           console.error("Error al cerrar la sesión", err);
           res.status(500).send("Error al cerrar la sesión");
         } else {
-          console.log('Se cerro la sesion del usuario');
+          console.log("Se cerro la sesion del usuario");
           res.redirect("/login");
         }
       });
     } else {
-      console.log('No cerro la sesion');
+      console.log("No cerro la sesion");
       res.redirect("/login");
     }
   } catch (error) {
     console.error("Error al cerrar la sesión", error);
     res.status(500).send("Error al cerrar la sesión");
   }
+};
+
+// Registra a un nuevo usuario con Passport
+export const registerUserWithPassport = async (req, res) => {
+  let user = req.user;
+  delete user.password;
+  req.session.user = user;
+  res.redirect("/profile");
+};
+
+// Autentica a un usuario y almacena la información en la sesión con Passport
+export const loginUserWithPassport = async (req, res) => {
+  let user = req.user;
+  if (!user)
+    return res
+      .status(400)
+      .send({ status: "Error", error: "Invalid Credentials" });
+  delete user.password;
+  req.session.user = user;
+  res.redirect("/profile");
 };
