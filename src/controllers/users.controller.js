@@ -1,6 +1,8 @@
+import { findUser } from "../dao/managers/userManager.js";
+
 // Muestra todos los usuarios en la base de datos
 export const showAllUsers = async (req, res) => {
-  let users = await userModel.find();
+  let users = await findUser;
   res.json(users);
   console.log(`Se realizo una consulta a la base de datos de "Usuarios"`);
 };

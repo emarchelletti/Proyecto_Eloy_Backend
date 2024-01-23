@@ -1,6 +1,7 @@
 import userModel from "../models/user.model.js";
 
 // Aca deberian estar las funciones que interactuen con la db
+export const findUser = userModel.find();
 
 // Registra a un nuevo usuario.
 export const registerUser = async (req, res) => {

@@ -1,6 +1,5 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import mongoose from "mongoose";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
@@ -12,22 +11,20 @@ import configureRoutes from "./routes/routes.js";
 import config from "./config/server.config.js";
 import { db } from "./config/db.config.js";
 
-
-
 // Server configuration
 const app = express();
 const port = config.port;
-let httpServer = '';
+let httpServer = "";
 
 if (port) {
-    httpServer = app.listen(port, () => {
-    console.log(`Servidor iniciado en el puerto ${port} en modo ${config.mode}`);
+  httpServer = app.listen(port, () => {
+    console.log(
+      `Servidor iniciado en el puerto ${port} en modo ${config.mode}`
+    );
   });
 } else {
   console.error("No hay variables de entorno configuradas");
 }
-
-
 
 // Configuración de WEBSOCKETS para chat y /realtimeproducts
 configureSocketIO(httpServer);
@@ -42,7 +39,6 @@ app.use(express.json()); // Middleware para analizar el cuerpo de las solicitude
 app.use(express.urlencoded({ extended: true })); // Middleware para analizar el cuerpo de las solicitudes como datos codificados en formularios
 app.use(express.static(__dirname + "/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
 app.use(cookieParser());
-
 
 // Configuración de middleware para manejar sesiones usando connect-mongo
 app.use(
