@@ -1,0 +1,15 @@
+<h2>PERFIL DEL USUARIO</h2>
+{{#if user}}
+  <p>Bienvenido, {{user.first_name}}!</p>
+  <p>Email: {{user.email}}</p>
+  <p>Edad: {{user.age}}</p>
+  <p>Rol: {{user.role}}</p>
+  <form action="{{actionLogin}}" method="post">
+    <input type="submit" value="Cerrar sesion" />
+  </form>
+{{else}}
+  <p>El usuario no esta logueado</p>
+  <a href="/login">
+    <button>Volver a inicio de sesion</button>
+  </a>
+{{/if}}
