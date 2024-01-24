@@ -1,22 +1,21 @@
 import express from "express";
 import passport from "passport";
-import {
-  loginUserWithPassport,
-  logOutUser,
-  showActiveSessions,
-} from "../../controllers/users.controller.js";
+import * as sessionsController from '../../controllers/sessions.controller.js';
+
 
 
 const router = express.Router();
 
 // Mostrar sesion activa
-router.get("/", showActiveSessions);
+router.get("/", sessionsController.showActiveSessions);
+
 //Login con Passport
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: "/faillogin" }),
-  loginUserWithPassport
+  passport.authenticate("login",{ failureRedirect: "/faillogin" }),
+  sessionsController.loginUserWithPassport
 );
+
 //Login con GitHub
 router.get(
   "/github",
@@ -31,6 +30,7 @@ router.get(
     res.redirect("/profile");
   }
 );
-router.post("/logout", logOutUser);
+
+router.post("/logout", sessionsController.destroySession);
 
 export default router;

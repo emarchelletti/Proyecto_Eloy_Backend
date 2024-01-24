@@ -1,67 +1,53 @@
 import userModel from "../models/user.model.js";
 
-// Devuelve todos los usuarios en la db
-export const getUser = userModel.find();
+const usersService = {
 
-// Registra a un nuevo usuario en la db
-export const registerUser = async (req, res) => {
-  try {
-    const { first_name, last_name, email, age, password } = req.body;
-    if (!first_name || !last_name || !email || !age || !password)
-      return res
-        .status(401)
-        .send({ status: "Error", error: "Incomplete values" });
+  getAllUsers: async () => {
+    try {
+      const users = await userModel.find();
+      return users;
+    } catch (error) {
+      throw new Error('Error al obtener todos los usuarios');
+    }
+  },
 
-    // Verificar si el correo electrónico es "admin@coder.com"
-    const isAdmin = email.toLowerCase() === "admin@coder.com";
+  addUser: async (userData) => {
+    try {
+      const newUser = new userModel(userData);
+      await newUser.save();
+      return newUser;
+    } catch (error) {
+      throw new Error('Error al agregar un nuevo usuario');
+    }
+  },
 
-    const user = new userModel({
-      first_name,
-      last_name,
-      email,
-      age,
-      password: createHash(password),
-      role: isAdmin ? "admin" : "user",
-    });
+  updateUser: async (userId, updatedUserData) => {
+    try {
+      const updatedUser = await userModel.findByIdAndUpdate(userId, updatedUserData, { new: true });
+      if (!updatedUser) {
+        throw new Error('Usuario no encontrado');
+      }
+      return updatedUser;
+    } catch (error) {
+      throw new Error('Error al actualizar el usuario');
+    }
+  },
 
-    await user.save();
-    delete user.password;
-
-    console.log("Se registro un nuevo usuario");
-    req.session.user = user;
-    res.redirect("/profile");
-  } catch (error) {
-    console.log("Error en el registro de nuevo usuario");
-  }
+  deleteUser: async (userId) => {
+    try {
+      const deletedUser = await userModel.findByIdAndDelete(userId);
+      if (!deletedUser) {
+        throw new Error('Usuario no encontrado');
+      }
+      return deletedUser;
+    } catch (error) {
+      throw new Error('Error al eliminar el usuario');
+    }
+  },
 };
 
-// Autentica a un usuario y almacena la información en la sesión.
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email });
+export default usersService;
 
-    if (!user)
-      return res.status(401).send({
-        status: "Error",
-        error: "No existe usuario con ese mail",
-      });
-
-    if (!isValidPassword(user, password))
-      return res.status(401).send({
-        status: "Error",
-        error: "Usuario y/o contraseña incorrecta 2",
-      });
-
-    delete user.password;
-    console.log("Se logueo un usuario");
-    req.session.user = user;
-    res.redirect("/profile");
-  } catch (error) {
-    console.log("Error, credenciales invalidas", error);
-    res.redirect("/error");
-  }
-};
 
 
 

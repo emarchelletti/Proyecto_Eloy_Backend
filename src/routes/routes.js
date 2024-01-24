@@ -5,10 +5,10 @@ import sessionsRouter from "./api/sessions.router.js";
 import userRouter from "./api/users.router.js";
 
 const configureRoutes = (app) => {
-  app.use("/api/products", productRouter);
-  app.use("/api/carts", cartRouter);
   app.use("/api/users", userRouter);
   app.use("/api/sessions", sessionsRouter);
+  app.use("/api/products", productRouter);
+  app.use("/api/carts", cartRouter);
   app.use("/", viewsRoutes.indexRouter);
   app.use("/login", viewsRoutes.loginRouter);
   app.use("/register", viewsRoutes.registerRouter);

@@ -1,18 +1,23 @@
 import express from "express";
-import {showAllUsers, registerUserWithPassport} from "../../controllers/users.controller.js";
+import * as userController from "../../controllers/users.controller.js";
 import passport from "passport";
-
 
 const router = express.Router();
 
-// Mostrar todos los usuarios en la base de datos
-router.get("/", showAllUsers);
+// Rutas para administrar los usuarios (desde Postman)
+router.get("/", userController.getAllUsers);
+router.post("/", userController.addUser);
+router.put("/:userId", userController.updateUser);
+router.delete("/:userId", userController.deleteUser);
 
 // Registro con passport
 router.post(
   "/register",
-  passport.authenticate("register", { failureRedirect: "/failregister" }),
-  registerUserWithPassport
+  passport.authenticate("register", { failureRedirect: "/api/users/failregister" }),
+  userController.registerUserWithPassport
 );
+router.get("/failregister", function (req, res) {
+  res.status(409).json({ message: "Ya existe un usuario con ese mail" });
+});
 
 export default router;

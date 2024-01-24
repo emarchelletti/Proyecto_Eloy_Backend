@@ -19,7 +19,7 @@ let httpServer = "";
 if (port) {
   httpServer = app.listen(port, () => {
     console.log(
-      `Servidor iniciado en el puerto ${port} en modo ${config.mode}`
+      `Servidor iniciado en http://localhost:${port} en modo ${config.mode}`
     );
   });
 } else {

@@ -1,61 +1,53 @@
-import { getUser } from "../dao/services/users.service.js";
+import usersService from "../dao/services/users.service.js";
 
-// Muestra todos los usuarios en la base de datos
-export const showAllUsers = async (req, res) => {
-  let users = await getUser;
-  res.json(users);
-  console.log(`Se realizo una consulta a la base de datos de "Usuarios"`);
-};
-
-// Muestra las sesiones activas
-export const showActiveSessions = async (req, res) => {
-  let activeSession = req.session;
-  res.json(activeSession);
-  console.log(`Se realizo una consulta a la base de datos de "Sessions"`);
-}
-
-//Cierra la sesión del usuario.
-export const logOutUser = async (req, res) => {
+// Obtener todos los usuarios
+export const getAllUsers = async (req, res) => {
   try {
-    // Verifica si el usuario está autenticado antes de cerrar la sesión
-    if (req.session.user) {
-      delete req.session.user;
-      // Opcionalmente, puedes destruir completamente la sesión
-      req.session.destroy((err) => {
-        if (err) {
-          console.error("Error al cerrar la sesión", err);
-          res.status(500).send("Error al cerrar la sesión");
-        } else {
-          console.log("Se cerro la sesion del usuario");
-          res.redirect("/login");
-        }
-      });
-    } else {
-      console.log("No cerro la sesion");
-      res.redirect("/login");
-    }
+    const users = await usersService.getAllUsers();
+    res.status(200).json(users);
   } catch (error) {
-    console.error("Error al cerrar la sesión", error);
-    res.status(500).send("Error al cerrar la sesión");
+    res.status(500).json({ error: error.message });
+  }
+};
+// Agregar un nuevo usuario
+export const addUser = async (req, res) => {
+  const userData = req.body;
+  try {
+    const newUser = await usersService.addUser(userData);
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Actualizar un usuario
+export const updateUser = async (req, res) => {
+  const { userId } = req.params;
+  const updatedUserData = req.body;
+  try {
+    const updatedUser = await usersService.updateUser(userId, updatedUserData);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Eliminar un usuario
+export const deleteUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const deletedUser = await usersService.deleteUser(userId);
+    console.log('Se elimino un usuario de la base de datos');
+    const message = `Se eliminó el usuario con el ID: ${userId}`;
+    res.status(200).json(message);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
 // Registra a un nuevo usuario con Passport
 export const registerUserWithPassport = async (req, res) => {
   let user = req.user;
-  delete user.password;
   req.session.user = user;
-  res.redirect("/profile");
+  res.redirect("/login");
 };
 
-// Autentica a un usuario y almacena la información en la sesión con Passport
-export const loginUserWithPassport = async (req, res) => {
-  let user = req.user;
-  if (!user)
-    return res
-      .status(400)
-      .send({ status: "Error", error: "Invalid Credentials" });
-  delete user.password;
-  req.session.user = user;
-  res.redirect("/profile");
-};
+

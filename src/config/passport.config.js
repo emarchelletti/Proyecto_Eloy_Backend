@@ -19,7 +19,7 @@ const initializePassport = () => {
         try {
           let user = await userModel.findOne({ email });
           if (user) {
-            console.log("Usuario ya existe");
+            console.log("Se intento registrar un usuario con un mail que ya existe");
             return done(null, false);
           }
 
