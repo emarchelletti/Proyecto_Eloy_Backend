@@ -7,6 +7,10 @@
   <form action="{{actionLogin}}" method="post">
     <input type="submit" value="Cerrar sesion" />
   </form>
+  <div class="button-container">
+  <button onclick="window.location.href='/products'">Comprar productos</button>
+  <button onclick="window.location.href='/chat'">Iniciar chat</button>
+</div>
 {{else}}
   <p>El usuario no esta logueado</p>
   <a href="/login">

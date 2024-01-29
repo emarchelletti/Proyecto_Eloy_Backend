@@ -1,4 +1,6 @@
 import express from 'express';
+import {showProducts} from '../../controllers/products.controller.js';
+import { isUser } from '../../middlewares/auth.middleware.js';
 
 const indexRouter = express.Router();
 const loginRouter = express.Router();
@@ -42,30 +44,12 @@ registerRouter.get("/", (req, res) => {
 });
 
 // Ruta para manejar la solicitud de la página /chat
-chatRouter.get('/', (req, res) => {
+chatRouter.get('/', isUser, (req, res) => {
   res.render('chat');
 });
 
 //Ruta para mostrar el listado de productos en la db
-productsViewRouter.get('/', async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 10; // Cantidad de productos por página
-
-  try {
-    const result = await Product.paginate({}, { page, limit, lean:true });
-    const totalPages = result.totalPages;
-    const currentPage = result.page;
-
-    res.render('products', {
-      products: result.docs,
-      totalPages,
-      currentPage
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener los productos" });
-  }
-});
+productsViewRouter.get('/', showProducts);
 
 // Ruta para mostrar un carrito específico
 cartViewRouter.get('/:cid', async (req, res) => {

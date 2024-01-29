@@ -43,10 +43,8 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// Registra a un nuevo usuario con Passport
+// Registrar a un nuevo usuario con Passport
 export const registerUserWithPassport = async (req, res) => {
-  let user = req.user;
-  req.session.user = user;
   res.redirect("/login");
 };
 

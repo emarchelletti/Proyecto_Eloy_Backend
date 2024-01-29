@@ -17,7 +17,9 @@ router.post(
   userController.registerUserWithPassport
 );
 router.get("/failregister", function (req, res) {
-  res.status(409).json({ message: "Ya existe un usuario con ese mail" });
+  let message = "Ya existe un usuario con ese mail"
+  res.status(409).json(message);
 });
+
 
 export default router;

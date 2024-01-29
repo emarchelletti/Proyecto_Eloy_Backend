@@ -2,8 +2,6 @@ import express from "express";
 import passport from "passport";
 import * as sessionsController from '../../controllers/sessions.controller.js';
 
-
-
 const router = express.Router();
 
 // Mostrar sesion activa
@@ -12,9 +10,13 @@ router.get("/", sessionsController.showActiveSessions);
 //Login con Passport
 router.post(
   "/login",
-  passport.authenticate("login",{ failureRedirect: "/faillogin" }),
+  passport.authenticate("login",{ failureRedirect: "/api/sessions/faillogin" }),
   sessionsController.loginUserWithPassport
 );
+router.get("/faillogin", function (req, res) {
+  let message = 'Usuario u contraseña incorrecta';
+  res.status(409).json(message);
+});
 
 //Login con GitHub
 router.get(

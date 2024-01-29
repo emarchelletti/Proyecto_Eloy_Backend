@@ -2,14 +2,14 @@ import express from "express";
 import handlebars from "express-handlebars";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import MongoStore from "connect-mongo";
 import passport from "passport";
+import cors from "cors";
 import __dirname from "./utils.js";
 import initializePassport from "./config/passport.config.js";
 import configureSocketIO from "./config/socketio.config.js";
 import configureRoutes from "./routes/routes.js";
 import config from "./config/server.config.js";
-import { db } from "./config/db.config.js";
+import { db, mongoStoreOptions } from "./config/db.config.js";
 
 // Server configuration
 const app = express();
@@ -39,21 +39,12 @@ app.use(express.json()); // Middleware para analizar el cuerpo de las solicitude
 app.use(express.urlencoded({ extended: true })); // Middleware para analizar el cuerpo de las solicitudes como datos codificados en formularios
 app.use(express.static(__dirname + "/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
 app.use(cookieParser());
+app.use(cors({origin:'http://localhost:8080/', methods:['GET','POST','PUT']}));
 
 // Configuración de middleware para manejar sesiones usando connect-mongo
-app.use(
-  session({
-    secret: process.env.KEYSECRET, // Clave secreta para firmar las cookies de sesión
-    resave: false, // Evitar que se guarde la sesión en cada solicitud
-    saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
-    store: MongoStore.create({
-      mongoUrl: config.url,
-      ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
-    }),
-  })
-);
+app.use(session(mongoStoreOptions));
 
-// Passport 
+// Passport
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());

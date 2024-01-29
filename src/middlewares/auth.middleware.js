@@ -1,12 +1,16 @@
-export const prueba = (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-
-    if (!user) {
-      // Recuperar el mensaje flash y responder con un JSON
-      const errorMessage = 'Error al registrar el usuario';
-      return res.status(401).json({ message: errorMessage });
-    }
+export const isAdmin = (req, res, next) => {
+  console.log(req.session);
+  if (req.user && req.user.role === 'admin') {
     next();
+  } else {
+    res.status(403).json({ error: 'Acceso no autorizado' });
   }
+};
+
+export const isUser = (req, res, next) => {
+  if (req.user && req.user.role === 'user') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso no autorizado' });
+  }
+};

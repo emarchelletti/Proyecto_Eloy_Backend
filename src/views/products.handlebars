@@ -1,23 +1,17 @@
 <h1>LISTADO DE PRODUCTOS</h1>
-  <div class="product-container">
-    {{#each products}}
-      <div class="product">
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <p>Precio: {{this.price}}</p>
-        <p>Categoría: {{this.category}}</p>
-        <!-- Botón para ver detalles -->
-        <a href="/products/{{this._id}}">Ver detalles</a>
-        <!-- Botón para agregar al carrito -->
-        <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
-          <button type="submit">Agregar al carrito</button>
-        </form>
-      </div>
-    {{/each}}
-  </div>
-
-
-
-
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="/js/products.js"></script>
+<div class="product-container">
+  {{#each products}}
+    <div class="product">
+      <h3>{{this.title}}</h3>
+      <p>{{this.description}}</p>
+      <p>Precio: {{this.price}}</p>
+      <p>Categoría: {{this.category}}</p>
+      <!-- Botón para ver detalles -->
+      {{!-- <a href="/products/{{this._id}}">Ver detalles</a> --}}
+      <!-- Botón para agregar al carrito -->
+      <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
+        <button type="submit">Agregar al carrito</button>
+      </form>
+    </div>
+  {{/each}}
+</div>
