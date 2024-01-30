@@ -1,5 +1,6 @@
 import cartModel from "../models/cart.model.js";
 import productModel from "../models/product.model.js";
+import { generateTicket } from "../services/ticket.service.js";
 
 const cartService = {
   getAllCarts: async () => {
@@ -101,43 +102,64 @@ const cartService = {
     }
   },
 
-  processPurchase: async (cartId) => {
+  processPurchase: async (cartId, userEmail) => {
     try {
-      const cart = await cartModel.findById(cartId).populate('products.product');
-  
+      const cart = await cartModel
+        .findById(cartId)
+        .populate("products.product");
+
       if (!cart) {
-        throw new Error('Carrito no encontrado');
-      }
-  
-      // Verificar el stock antes de procesar la compra
-      if (!Array.isArray(cart.products)) {
-        throw new Error('El carrito no contiene productos válidos');
+        throw new Error("Carrito no encontrado");
       }
 
+      // Verificar el stock antes de procesar la compra
+      if (!Array.isArray(cart.products)) {
+        throw new Error("El carrito no contiene productos válidos");
+      }
       for (const _id of cart.products) {
         const product = await productModel.findById(_id.product);
-  
+
         if (!product) {
           throw new Error(`Producto con ID ${_id.product} no encontrado`);
         }
-  
+
         if (product.stock < _id.quantity) {
-          throw new Error(`Stock insuficiente para el producto ${product.title}`);
+          throw new Error(
+            `Stock insuficiente para el producto ${product.title}`
+          );
         }
-  
         // Restar la cantidad comprada del stock del producto
         product.stock -= _id.quantity;
         await product.save();
       }
-  
+
+      //Asigno el mail del usuario logueado
+      const purchaser = userEmail; 
+
+      //Calculo la cantidad de $ total del carrito
+      const calculateTotalAmount = (cart) => {
+        if (!Array.isArray(cart.products)) {
+          return 0;
+        }
+
+        return cart.products.reduce((total, item) => {
+          const productTotal = item.product.price * item.quantity;
+          return total + productTotal;
+        }, 0);
+      };
+      const amount = calculateTotalAmount(cart);
+
+      // Generar el ticket después de la compra
+      const ticket = await generateTicket(purchaser, amount);
+
       // Limpiar el carrito después de la compra
-      await cartModel.findByIdAndUpdate(cartId, { $set: { products: [] } });
-  
-      return { success: true};
+      // await cartModel.findByIdAndUpdate(cartId, { $set: { products: [] } });
+
+      return { success: true, ticket };
     } catch (error) {
       throw new Error(`Error al procesar la compra: ${error.message}`);
     }
-  }
+  },
 };
 
 export default cartService;

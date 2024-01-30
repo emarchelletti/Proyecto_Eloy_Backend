@@ -1,6 +1,5 @@
 import cartService from "../dao/services/carts.service.js";
 
-
 export const getAll = async (req, res) => {
   try {
     const carts = await cartService.getAllCarts();
@@ -61,7 +60,7 @@ export const addProdToCart = async (req, res) => {
       quantity
     );
     console.log("Se agrego un producto al carrito");
-    res.redirect('/products');
+    res.redirect("/products");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -96,26 +95,24 @@ export const updateProdQuantityToCart = async (req, res) => {
 };
 
 export const showCart = async (req, res) => {
-  
-
   try {
     const cartId = req.session.user.cart;
     const cart = await cartService.getCartById(cartId);
     if (!cart) {
-      return res.status(404).json({ error: 'Carrito no encontrado' });
+      return res.status(404).json({ error: "Carrito no encontrado" });
     }
-    res.render('cart', { cart });
+    res.render("cart", { cart });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al obtener el carrito' });
+    res.status(500).json({ error: "Error al obtener el carrito" });
   }
 };
 
 export const processPurchase = async (req, res) => {
   const { cartId } = req.params;
-  console.log('el id es :' + cartId);
+  const userEmail = req.session.user.email;
   try {
-    const result = await cartService.processPurchase(cartId);
+    const result = await cartService.processPurchase(cartId, userEmail);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
