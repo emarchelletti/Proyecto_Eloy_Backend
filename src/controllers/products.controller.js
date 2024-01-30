@@ -4,7 +4,6 @@ export const getAllProducts = async (req, res) => {
   const { limit, page, sort, query, available } = req.query;
   try {
     const result = await productService.getAllProducts({ limit, page, sort, query, available }); 
-    console.log(req.session.user); 
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -57,7 +56,9 @@ export const showProducts = async (req, res) => {
     const limit = 10; // Cantidad de productos por página
   
     try {
+      let cartId = req.session.user.cart;
       const productsData = await productService.showProducts(page, limit);
+      productsData.cartId = cartId;
   
       res.render('products', productsData);
     } catch (error) {

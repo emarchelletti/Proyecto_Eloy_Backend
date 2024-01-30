@@ -1,43 +1,111 @@
-import * as cartService from '../dao/services/carts.service.js';
+import cartService from "../dao/services/carts.service.js";
+
+export const getAll = async (req, res) => {
+  try {
+    const carts = await cartService.getAllCarts();
+    res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getById = async (req, res) => {
+  const { cartId } = req.params;
+  try {
+    const cart = await cartService.getCartById(cartId);
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const create = async (req, res) => {
+  const { userId } = req.body; // aca tiene que usar el id de la session
+  try {
+    const newCart = await cartService.createCart(userId);
+    res.status(201).json(newCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const update = async (req, res) => {
+  const { cartId } = req.params;
+  const cartData = req.body;
+  try {
+    const updatedCart = await cartService.updateCart(cartId, cartData);
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const remove = async (req, res) => {
+  const { cartId } = req.params;
+  try {
+    await cartService.removeCart(cartId);
+    res.json({ message: "Carrito eliminado exitosamente" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const addProdToCart = async (req, res) => {
+  const { cartId, productId } = req.params;
+  const { quantity } = req.body; // aca tendria que agregar un contador al view de products para mandar la cantidad x el body
+  try {
+    const updatedCart = await cartService.addProductToCart(
+      cartId,
+      productId,
+      quantity
+    );
+    console.log("Se agrego un producto al carrito");
+    res.redirect('/products');
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const removeProdToCart = async (req, res) => {
+  const { cartId, productId } = req.params;
+  try {
+    const updatedCart = await cartService.removeProductFromCart(
+      cartId,
+      productId
+    );
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const updateProdQuantityToCart = async (req, res) => {
+  const { cartId, productId } = req.params;
+  const { quantity } = req.body;
+  try {
+    const updatedCart = await cartService.updateProductQuantityInCart(
+      cartId,
+      productId,
+      quantity
+    );
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const showCart = async (req, res) => {
-  const userId = req.session.user.id; 
-  try {
-    const cart = await cartService.getCartByUserId(userId);
-    res.json(cart);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+  
 
-export const addToCart = async (req, res) => {
-  const userId = req.user._id; 
-  const { productId, quantity } = req.body;
   try {
-    const cart = await cartService.addToCart(userId, productId, quantity);
-    res.json(cart);
+    const cartId = req.session.user.cart;
+    const cart = await cartService.getCartById(cartId);
+    if (!cart) {
+      return res.status(404).json({ error: 'Carrito no encontrado' });
+    }
+    res.render('cart', { cart });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const removeFromCart = async (req, res) => {
-  const userId = req.user._id; 
-  const productId = req.params.productId;
-  try {
-    const cart = await cartService.removeFromCart(userId, productId);
-    res.json(cart);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const clearCart = async (req, res) => {
-  const userId = req.user._id; 
-  try {
-    const cart = await cartService.clearCart(userId);
-    res.json(cart);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el carrito' });
   }
 };

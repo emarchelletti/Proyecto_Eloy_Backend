@@ -20,7 +20,7 @@ export const mongoStoreOptions = {
   saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
   store: MongoStore.create({
     mongoUrl: config.url,
-    ttl: 5 * 60, // Tiempo de vida de la sesión en segundos (5 minutos en este caso)
+    ttl: 15 * 60, // Tiempo de vida de la sesión en segundos (5 minutos en este caso)
   }),
 };
 

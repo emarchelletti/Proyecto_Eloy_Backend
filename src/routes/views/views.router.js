@@ -1,5 +1,7 @@
 import express from 'express';
 import {showProducts} from '../../controllers/products.controller.js';
+import {showCart} from '../../controllers/carts.controller.js';
+
 import { isUser } from '../../middlewares/auth.middleware.js';
 
 const indexRouter = express.Router();
@@ -51,21 +53,7 @@ chatRouter.get('/', isUser, (req, res) => {
 //Ruta para mostrar el listado de productos en la db
 productsViewRouter.get('/', showProducts);
 
-// Ruta para mostrar un carrito específico
-cartViewRouter.get('/:cid', async (req, res) => {
-  const cartId = req.params.cid;
-
-  try {
-    const cart = await Cart.findById(cartId).populate('products.product').lean();
-    if (!cart) {
-      return res.status(404).json({ error: 'Carrito no encontrado' });
-    }
-
-    res.render('cart', { cart });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener el carrito' });
-  }
-});
+// Ruta para mostrar carrito del usuario logueado
+cartViewRouter.get('/', showCart);
 
 export { indexRouter, loginRouter, profileRouter, registerRouter, chatRouter, productsViewRouter, cartViewRouter};

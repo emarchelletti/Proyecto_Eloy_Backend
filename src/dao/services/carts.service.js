@@ -1,36 +1,100 @@
-// cartService.js
 import cartModel from "../models/cart.model.js";
 
-export const getCartByUserId = async (userId) => {
-  const cart = await cartModel.findOne({ userId }).populate("products.product");
-  return cart;
+const cartService = {
+  getAllCarts: async () => {
+    try {
+      return await cartModel.find();
+    } catch (error) {
+      throw new Error(`Error al obtener todos los carritos: ${error.message}`);
+    }
+  },
+
+  getCartById: async (cartId) => {
+    try {
+      return await cartModel.findById(cartId).populate('products.product').lean();
+    } catch (error) {
+      throw new Error(`Error al obtener el carrito: ${error.message}`);
+    }
+  },
+
+  createCart: async (userId) => {
+    try {
+      const newCart = await cartModel.create({ user: userId });
+      return newCart;
+    } catch (error) {
+      throw new Error(`Error al crear el carrito: ${error.message}`);
+    }
+  },
+
+  updateCart: async (cartId, cartData) => {
+    try {
+      return await cartModel.findByIdAndUpdate(cartId, cartData, { new: true });
+    } catch (error) {
+      throw new Error(`Error al actualizar el carrito: ${error.message}`);
+    }
+  },
+
+  removeCart: async (cartId) => {
+    try {
+      return await cartModel.findByIdAndDelete(cartId);
+    } catch (error) {
+      throw new Error(`Error al eliminar el carrito: ${error.message}`);
+    }
+  },
+
+  addProductToCart: async (cartId, productId, quantity) => {
+    try {
+      const cart = await cartModel.findById(cartId);
+
+      if (!cart) {
+        throw new Error('Carrito no encontrado');
+      }
+    const existingProductIndex = cart.products.findIndex(product => String(product.product) === String(productId));
+  
+      if (existingProductIndex !== -1 ) {
+        cart.products[existingProductIndex].quantity += 1;
+      } else {
+        cart.products.push({ product: productId});
+      }
+  
+      await cart.save();
+      return cart;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  removeProductFromCart: async (cartId, productId) => {
+    try {
+      const cart = await cartModel.findById(cartId);
+      cart.products = cart.products.filter(
+        (item) => !item.product.equals(productId)
+      );
+      return await cart.save();
+    } catch (error) {
+      throw new Error(`Error al quitar producto del carrito: ${error.message}`);
+    }
+  },
+
+  updateProductQuantityInCart: async (cartId, productId, quantity) => {
+    try {
+      const cart = await cartModel.findById(cartId);
+      const productIndex = cart.products.findIndex((item) =>
+        item.product.equals(productId)
+      );
+
+      if (productIndex !== -1) {
+        cart.products[productIndex].quantity = quantity;
+      }
+
+      return await cart.save();
+    } catch (error) {
+      throw new Error(
+        `Error al actualizar la cantidad del producto en el carrito: ${error.message}`
+      );
+    }
+  },
+
 };
 
-export const addToCart = async (userId, productId, quantity) => {
-  const cart = await cartModel
-    .findOneAndUpdate(
-      { userId },
-      { $push: { products: { product: productId, quantity } } },
-      { new: true, upsert: true }
-    )
-    .populate("products.product");
-  return cart;
-};
-
-export const removeFromCart = async (userId, productId) => {
-  const cart = await cartModel
-    .findOneAndUpdate(
-      { userId },
-      { $pull: { products: { product: productId } } },
-      { new: true }
-    )
-    .populate("products.product");
-  return cart;
-};
-
-export const clearCart = async (userId) => {
-  const cart = await cartModel
-    .findOneAndUpdate({ userId }, { $set: { products: [] } }, { new: true })
-    .populate("products.product");
-  return cart;
-};
+export default cartService;

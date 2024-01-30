@@ -3,6 +3,7 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import { createHash, isValidPassword } from "../utils.js";
 import userModel from "../dao/models/user.model.js";
+import cartModel from "../dao/models/cart.model.js";
 import "dotenv/config.js";
 
 const LocalStrategy = local.Strategy;
@@ -59,6 +60,12 @@ const initializePassport = () => {
             let message = "Contraseña incorrecta";
             console.log(message);
             return done(null, false);
+          }
+
+          if (!user.cart) {
+            const newCart = await cartModel.create({ products: [] });
+            user.cart = newCart._id;
+            await user.save();
           }
 
           return done(null, user);

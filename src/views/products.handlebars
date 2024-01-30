@@ -9,7 +9,7 @@
       <!-- Botón para ver detalles -->
       {{!-- <a href="/products/{{this._id}}">Ver detalles</a> --}}
       <!-- Botón para agregar al carrito -->
-      <form action="/api/carts/:cid/product/{{this._id}}" method="POST">
+      <form action="/api/carts/{{../cartId}}/products/{{this._id}}" method="POST">
         <button type="submit">Agregar al carrito</button>
       </form>
     </div>
