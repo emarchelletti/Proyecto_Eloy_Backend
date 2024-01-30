@@ -12,5 +12,7 @@ router.delete("/:cartId", cartController.remove);
 router.post("/:cartId/products/:productId", isUser,cartController.addProdToCart);
 router.delete("/:cartId/products/:productId", isUser,cartController.removeProdToCart);
 router.put("/:cartId/products/:productId", isUser,cartController.updateProdQuantityToCart);
+router.post("/:cartId/purchase", cartController.processPurchase);
+
 
 export default router;

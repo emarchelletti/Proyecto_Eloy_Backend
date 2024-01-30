@@ -1,5 +1,6 @@
 import cartService from "../dao/services/carts.service.js";
 
+
 export const getAll = async (req, res) => {
   try {
     const carts = await cartService.getAllCarts();
@@ -107,5 +108,16 @@ export const showCart = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener el carrito' });
+  }
+};
+
+export const processPurchase = async (req, res) => {
+  const { cartId } = req.params;
+  console.log('el id es :' + cartId);
+  try {
+    const result = await cartService.processPurchase(cartId);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
