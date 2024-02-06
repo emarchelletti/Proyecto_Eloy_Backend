@@ -4,7 +4,7 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import cors from "cors";
-import __dirname from "./utils.js";
+import {__dirname} from "./utils.js";
 import initializePassport from "./config/passport.config.js";
 import configureSocketIO from "./config/socketio.config.js";
 import configureRoutes from "./routes/routes.js";

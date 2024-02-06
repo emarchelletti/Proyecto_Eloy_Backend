@@ -3,11 +3,14 @@ import productRouter from "./api/product.router.js";
 import cartRouter from "./api/cart.router.js";
 import sessionsRouter from "./api/sessions.router.js";
 import userRouter from "./api/users.router.js";
+import mockRouter from "./api/mockRouter.js";
+import * as notificationRouter from "./api/notification.router.js";
 
 const configureRoutes = (app) => {
   app.use("/api/users", userRouter);
   app.use("/api/sessions", sessionsRouter);
   app.use("/api/products", productRouter);
+  app.use("/api/mockingproducts", mockRouter);
   app.use("/api/carts", cartRouter);
   app.use("/", viewsRoutes.indexRouter);
   app.use("/login", viewsRoutes.loginRouter);
@@ -16,6 +19,8 @@ const configureRoutes = (app) => {
   app.use("/carts", viewsRoutes.cartViewRouter);
   app.use("/products", viewsRoutes.productsViewRouter);
   app.use("/chat", viewsRoutes.chatRouter);
+  app.use("/mail", notificationRouter.mailRouter);
+  app.use("/sms", notificationRouter.smsRouter);
 };
 
 export default configureRoutes;

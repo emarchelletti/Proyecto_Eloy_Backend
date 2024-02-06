@@ -56,4 +56,5 @@ productsViewRouter.get('/', showProducts);
 // Ruta para mostrar carrito del usuario logueado
 cartViewRouter.get('/', showCart);
 
+
 export { indexRouter, loginRouter, profileRouter, registerRouter, chatRouter, productsViewRouter, cartViewRouter};
