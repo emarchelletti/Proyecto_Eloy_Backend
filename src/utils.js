@@ -37,7 +37,7 @@ export const generateMockProducts = () => {
     price: fakerES.commerce.price(),
     stock: fakerES.number.int({ min: 0, max: 200 }),
     category: fakerES.commerce.productAdjective(),
-    thumbnail: fakerES.image.abstract(),
+    thumbnail: fakerES.image.url(),
     visible : true,
   };
 };

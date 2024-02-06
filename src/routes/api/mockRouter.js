@@ -1,9 +1,10 @@
 import express from 'express';
-import {getMockProducts} from '../../controllers/mock.controller.js';
+import {getMockProducts, createMockProduct} from '../../controllers/mock.controller.js';
 
 const router = express.Router();
 
 router.get('/', getMockProducts);
+router.post('/', createMockProduct);
 
 
 export default router;
