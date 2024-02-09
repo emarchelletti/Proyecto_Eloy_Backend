@@ -50,6 +50,7 @@ const initializePassport = () => {
       async (username, password, done) => {
         try {
           let user = await userModel.findOne({ email: username });
+          let cartOwner = user.first_name;
           if (!user) {
             let message = "Usuario no existe ";
             console.log(message);
@@ -63,7 +64,7 @@ const initializePassport = () => {
           }
 
           if (!user.cart) {
-            const newCart = await cartModel.create({ products: [] });
+            const newCart = await cartModel.create({ user:cartOwner, products: [] });
             user.cart = newCart._id;
             await user.save();
           }
@@ -110,7 +111,7 @@ const initializePassport = () => {
     );
 
   passport.serializeUser((user, done) => {
-    console.log(user._id);
+    //console.log(user._id);
     done(null, user._id);
   });
   passport.deserializeUser(async (id, done) => {
