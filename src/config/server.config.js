@@ -7,8 +7,8 @@ commander.option(
   "Modo del servidor: development o production"
 );
 commander.parse();
-const mode = commander.opts().mode;
-const envPath = `.env.${mode}`;
+const environment = commander.opts().environment;
+const envPath = `.env.${environment}`;
 //dotenv.config({ path: envPath }); USAR ESTE METODO CUANDO SE TENGAN .env DISTINTOS SEGUN EL MODO
 
 dotenv.config('.env');
@@ -16,5 +16,5 @@ dotenv.config('.env');
 export default {
   port: process.env.PORT,
   url: process.env.MONGO_URL,
-  mode: "Desarrollo",
+  environment: process.env.NODE_ENV,
 };

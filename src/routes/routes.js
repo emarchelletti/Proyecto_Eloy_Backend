@@ -3,7 +3,8 @@ import productRouter from "./api/product.router.js";
 import cartRouter from "./api/cart.router.js";
 import sessionsRouter from "./api/sessions.router.js";
 import userRouter from "./api/users.router.js";
-import mockRouter from "./api/mockRouter.js";
+import mockRouter from "./test/mockRouter.js";
+import loggerRouter from "./test/loggerRouter.js";
 import * as notificationRouter from "./api/notification.router.js";
 
 const configureRoutes = (app) => {
@@ -21,6 +22,7 @@ const configureRoutes = (app) => {
   app.use("/chat", viewsRoutes.chatRouter);
   app.use("/mail", notificationRouter.mailRouter);
   app.use("/sms", notificationRouter.smsRouter);
+  app.use("/loggerTest", loggerRouter);
 };
 
 export default configureRoutes;
