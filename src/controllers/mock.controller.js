@@ -1,6 +1,6 @@
-import { generateMockProducts } from "../utils.js";
+import { generateMockProducts } from "..//utils/utils.js";
 import { createProduct } from "../dao/services/products.service.js";
-import { customizeError } from "../errorHandler.js";
+import { customizeError } from "../middlewares/error.middleware.js";
 
 
 export const getMockProducts = async (req, res) => {

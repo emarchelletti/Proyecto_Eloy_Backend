@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import twilio from "twilio";
 import { fakerES } from "@faker-js/faker";
-import { emailConfig, smsConfig } from "./config/notification.config.js";
+import { emailConfig, smsConfig } from "../config/notification.config.js";
 
 export const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));

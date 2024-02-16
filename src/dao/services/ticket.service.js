@@ -1,5 +1,5 @@
 import ticketModel from "../models/ticket.model.js";
-import {generateUniqueCode} from "../../utils.js";
+import {generateUniqueCode} from "../../utils/utils.js";
 
 export const generateTicket = async (purchaser, amount) => {
   try {

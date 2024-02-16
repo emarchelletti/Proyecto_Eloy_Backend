@@ -1,4 +1,4 @@
-import {transport, twilioClient} from "../utils.js";
+import {transport, twilioClient} from "..//utils/utils.js";
 import {emailConfig, smsConfig} from "../config/notification.config.js";
 
 export const sendEmail = async (req, res) => {
