@@ -58,7 +58,9 @@ export const addProdToCart = async (req, res) => {
   try {
     const product = await productService.getProductById(productId);
     if (user.role === "premium" && product.owner === user.email) {
-      return res.status(403).json({ error: "No puedes agregar tu propio producto al carrito" });
+      return res
+        .status(403)
+        .json({ error: "No puedes agregar tu propio producto al carrito" });
     }
     const updatedCart = await cartService.addProductToCart(
       cartId,
@@ -102,15 +104,23 @@ export const updateProdQuantityToCart = async (req, res) => {
 
 export const showCart = async (req, res) => {
   try {
-    const cartId = req.session.user.cart;
-    const cart = await cartService.getCartById(cartId);
-    if (!cart) {
-      return res.status(404).json({ error: "Carrito no encontrado" });
+    const userIsLogged = req.session.user;
+
+    if (!userIsLogged) {
+      return res
+        .status(404)
+        .json({
+          error: "No hay ningun usuario logueado para mostrar un carrito",
+        });
     }
+
+    const cartId = userIsLogged.cart;
+    const cart = await cartService.getCartById(cartId);
+
     res.render("cart", { cart });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al obtener el carrito" });
+    res.status(500).json({ error: error.message });
   }
 };
 
