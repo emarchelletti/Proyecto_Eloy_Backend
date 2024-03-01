@@ -1,6 +1,8 @@
 import express from "express";
 import * as userController from "../../controllers/users.controller.js";
+import * as passwordController from "../../controllers/password.controller.js";
 import passport from "passport";
+import { isUserOrPremium } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -9,6 +11,8 @@ router.get("/", userController.getAllUsers);
 router.post("/", userController.addUser);
 router.put("/:userId", userController.updateUser);
 router.delete("/:userId", userController.deleteUser);
+router.put("/premium/:userId", userController.updateUser);
+
 
 // Registro con passport
 router.post(
@@ -21,5 +25,7 @@ router.get("/failregister", function (req, res) {
   res.status(409).json(message);
 });
 
+//Password reset
+router.post("/passwordreset", passwordController.resetPassword);
 
 export default router;

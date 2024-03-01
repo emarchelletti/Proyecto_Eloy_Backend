@@ -50,7 +50,7 @@ const initializePassport = () => {
       async (username, password, done) => {
         try {
           let user = await userModel.findOne({ email: username });
-          let cartOwner = user.first_name;
+          let cartOwner;
           if (!user) {
             let message = "Usuario no existe ";
             console.log(message);
@@ -63,6 +63,8 @@ const initializePassport = () => {
             return done(null, false);
           }
 
+          cartOwner = user.first_name;
+          
           if (!user.cart) {
             const newCart = await cartModel.create({ user:cartOwner, products: [] });
             user.cart = newCart._id;

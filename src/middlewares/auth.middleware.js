@@ -14,3 +14,19 @@ export const isUser = (req, res, next) => {
     res.status(403).json({ error: 'Acceso no autorizado' });
   }
 };
+
+export const isAdminOrPremium = (req, res, next) => {
+  if (req.user.role === 'admin' || req.user.role === 'premium') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso no autorizado' });
+  }
+};
+
+export const isUserOrPremium = (req, res, next) => {
+  if (req.user.role === 'user' || req.user.role === 'premium') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Acceso no autorizado' });
+  }
+};

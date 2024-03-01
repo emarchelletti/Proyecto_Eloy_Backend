@@ -11,6 +11,8 @@ const registerRouter = express.Router();
 const chatRouter = express.Router();
 const productsViewRouter = express.Router();
 const cartViewRouter = express.Router();
+const passwordRecoveryRouter = express.Router();
+const passwordResetRouter = express.Router();
 
 // Ruta para manejar la solicitud de la página de inicio
 indexRouter.get('/', (req, res) => {
@@ -20,10 +22,20 @@ indexRouter.get('/', (req, res) => {
 // Ruta para manejar el login
 loginRouter.get("/", (req, res) => {
   let data = {
-    title: "Inicio de sesión",
     actionLogin: "/api/sessions/login/",
   };
   res.render("login", data);
+});
+
+// Ruta para recuperar la contraseña
+passwordRecoveryRouter.get("/", (req, res) => {
+  res.render("passwordRecovery");
+});
+
+// Ruta para restablecer la contraseña
+passwordResetRouter.get("/", (req, res) => {
+  const token = req.query.token;
+  res.render("passwordReset", { token });
 });
 
 // Ruta para manejar el profile
@@ -57,4 +69,4 @@ productsViewRouter.get('/', showProducts);
 cartViewRouter.get('/', showCart);
 
 
-export { indexRouter, loginRouter, profileRouter, registerRouter, chatRouter, productsViewRouter, cartViewRouter};
+export { indexRouter, loginRouter, profileRouter, registerRouter, chatRouter, productsViewRouter, cartViewRouter, passwordRecoveryRouter, passwordResetRouter};

@@ -2,7 +2,7 @@ import cartModel from "../models/cart.model.js";
 import productModel from "../models/product.model.js";
 import { generateTicket } from "../services/ticket.service.js";
 
-const cartService = {
+const   cartService = {
   getAllCarts: async () => {
     try {
       return await cartModel.find();

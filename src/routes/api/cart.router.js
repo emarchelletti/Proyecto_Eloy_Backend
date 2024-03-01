@@ -1,6 +1,6 @@
 import express from 'express';
 import * as cartController from '../../controllers/carts.controller.js';
-import { isUser } from '../../middlewares/auth.middleware.js';
+import { isUser, isUserOrPremium } from '../../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get("/:cartId", cartController.getById);
 router.post("/", cartController.create);
 router.put("/:cartId", cartController.update);
 router.delete("/:cartId", cartController.remove);
-router.post("/:cartId/products/:productId", isUser,cartController.addProdToCart);
+router.post("/:cartId/products/:productId", isUserOrPremium,cartController.addProdToCart);
 router.delete("/:cartId/products/:productId", isUser,cartController.removeProdToCart);
 router.put("/:cartId/products/:productId", isUser,cartController.updateProdQuantityToCart);
 router.get  ("/:cartId/purchase", isUser,cartController.processPurchase);

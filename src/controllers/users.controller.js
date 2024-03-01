@@ -25,6 +25,7 @@ export const updateUser = async (req, res) => {
   const updatedUserData = req.body;
   try {
     const updatedUser = await usersService.updateUser(userId, updatedUserData);
+    console.log('Se actualizo un usuario');
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,7 +43,6 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 // Registrar a un nuevo usuario con Passport
 export const registerUserWithPassport = async (req, res) => {
   console.log('Se ha registrado un nuevo usuario con Passport');

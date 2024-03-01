@@ -16,6 +16,8 @@ const configureRoutes = (app) => {
   app.use("/", viewsRoutes.indexRouter);
   app.use("/login", viewsRoutes.loginRouter);
   app.use("/register", viewsRoutes.registerRouter);
+  app.use("/passwordRecovery", viewsRoutes.passwordRecoveryRouter);
+  app.use("/resetPassword", viewsRoutes.passwordResetRouter);
   app.use("/profile", viewsRoutes.profileRouter);
   app.use("/carts", viewsRoutes.cartViewRouter);
   app.use("/products", viewsRoutes.productsViewRouter);

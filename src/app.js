@@ -26,7 +26,7 @@ if (port) {
   console.error("No hay variables de entorno configuradas");
 }
 
-// Configuración de WEBSOCKETS para chat y /realtimeproducts
+// Configuración de WEBSOCKETS para el chat
 configureSocketIO(httpServer);
 
 // Configuración de Handlebars
@@ -39,13 +39,9 @@ app.use(express.json()); // Middleware para analizar el cuerpo de las solicitude
 app.use(express.urlencoded({ extended: true })); // Middleware para analizar el cuerpo de las solicitudes como datos codificados en formularios
 app.use(express.static("src/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
 app.use(cookieParser());
-app.use(
-  cors({ origin: "http://localhost:8080/", methods: ["GET", "POST", "PUT"] })
-);
+app.use(session(mongoStoreOptions)); // Configuración de middleware para manejar sesiones usando connect-mongo
+app.use(cors({ origin: "http://localhost:8080/", methods: ["GET", "POST", "PUT"] }));
 app.use(addLogger);
-
-// Configuración de middleware para manejar sesiones usando connect-mongo
-app.use(session(mongoStoreOptions));
 
 // Passport
 initializePassport();

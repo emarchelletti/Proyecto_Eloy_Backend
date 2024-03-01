@@ -14,7 +14,7 @@ router.post(
   sessionsController.loginUserWithPassport
 );
 router.get("/faillogin", function (req, res) {
-  let message = 'Error en el login, revise la consola para mas detalles';
+  let message = 'Usuario o contraseña incorrectos, revise la consola para mas detalles';
   res.status(409).json(message);
 });
 

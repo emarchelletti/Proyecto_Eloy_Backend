@@ -1,4 +1,5 @@
 import cartService from "../dao/services/carts.service.js";
+import * as productService from "../dao/services/products.service.js";
 
 export const getAll = async (req, res) => {
   try {
@@ -52,8 +53,13 @@ export const remove = async (req, res) => {
 
 export const addProdToCart = async (req, res) => {
   const { cartId, productId } = req.params;
+  const user = req.session.user;
   const { quantity } = req.body; // aca tendria que agregar un contador al view de products para mandar la cantidad x el body
   try {
+    const product = await productService.getProductById(productId);
+    if (user.role === "premium" && product.owner === user.email) {
+      return res.status(403).json({ error: "No puedes agregar tu propio producto al carrito" });
+    }
     const updatedCart = await cartService.addProductToCart(
       cartId,
       productId,
