@@ -1,0 +1,185 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - products
+      description: Obtiene una lista de todos los productos disponibles.
+      responses:
+        200:
+          description: Éxito. Devuelve una lista de productos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        500:
+          description: Error al obtener todos los productos
+    post:
+      summary: Crea un nuevo producto.
+      tags:
+        - products
+      description: Crea un nuevo producto con los datos proporcionados.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        200:
+          description: Éxito. Devuelve el nuevo producto creado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        400:
+          description: Error de solicitud. El cuerpo de la solicitud es incorrecto.
+        403:
+          description: Permiso denegado. Solo los usuarios premium pueden agregar productos.
+        500:
+          description: Error del servidor
+
+  /api/products/{productId}:
+    get:
+      summary: Obtiene un producto por ID.
+      tags:
+        - products
+      description: Obtiene los detalles de un producto específico según su ID.
+      parameters:
+        - in: path
+          name: productId
+          description: ID del producto a obtener.
+          required: true
+          schema:
+            $type: string
+      responses:
+        200:
+          description: Éxito. Devuelve los detalles del producto.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    put:
+      summary: Actualiza un producto existente.
+      tags:
+        - products
+      description: Actualiza los datos de un producto existente según su ID.
+      parameters:
+        - in: path
+          name: productId
+          description: ID del producto a actualizar.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProduct"
+      responses:
+        200:
+          description: Éxito. Devuelve el producto actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        400:
+          description: Error de solicitud. El cuerpo de la solicitud es incorrecto.
+        403:
+          description: Permiso denegado. Solo los usuarios premium pueden actualizar productos.
+        404:
+          description: No encontrado. El producto con el ID especificado no existe.
+    delete:
+      summary: Elimina un producto existente.
+      tags:
+        - products
+      description: Elimina un producto existente según su ID.
+      parameters:
+        - in: path
+          name: productId
+          description: ID del producto a eliminar.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Éxito. El producto fue eliminado correctamente.
+        403:
+          description: Permiso denegado. Solo los usuarios premium o el administrador pueden eliminar productos.
+        404:
+          description: No encontrado. El producto con el ID especificado no existe.
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Stock del producto
+        category:
+          type: string
+          description: Categoria del producto
+        thumbnail:
+          type: string
+          description: Imagen del producto
+        visible:
+          type: boolean
+        owner:
+          type: string
+      example:
+        _id: "6123456789abcdef12345678"
+        title: "Smartphone"
+        description: "Un teléfono inteligente de última generación"
+        price: 599.99
+        stock: 100
+        category: "Electrónica"
+        thumbnail: "https://example.com/images/smartphone.jpg"
+        owner: "user@example.com"
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Stock del producto
+        category:
+          type: string
+          description: Categoria del producto
+        thumbnail:
+          type: string
+          description: Imagen del producto
+        visible:
+          type: boolean
+        owner:
+          type: string
+      example:
+        
+        title: "Notebook"
+        description: "Una computadora portatil"
+        price: 999
+        stock: 50
+        category: "Electrónica"
+        thumbnail: "https://example.com/images/notebook.jpg"
+        owner: "user@example.com"

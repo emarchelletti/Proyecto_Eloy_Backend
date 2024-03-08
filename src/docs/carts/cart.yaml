@@ -1,0 +1,249 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos de compras
+      tags:
+        - carts
+      description: Obtiene una lista de todos los carritos de compras.
+      responses:
+        200:
+          description: Éxito. Devuelve una lista de carritos de compras.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        500:
+          description: Error al obtener todos los carritos de compras
+
+    post:
+      summary: Crea un nuevo carrito de compras.
+      tags:
+        - carts
+      description: Crea un nuevo carrito de compras asociado a un usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID del usuario asociado al carrito.
+              example:
+                userId: "user@example.com"
+      responses:
+        201:
+          description: Éxito. Devuelve el nuevo carrito de compras creado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        500:
+          description: Error del servidor
+
+  /api/carts/{cartId}:
+    get:
+      summary: Obtiene un carrito de compras por ID.
+      tags:
+        - carts
+      description: Obtiene los detalles de un carrito de compras específico según su ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras a obtener.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Éxito. Devuelve los detalles del carrito de compras.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        404:
+          description: No encontrado. El carrito de compras con el ID especificado no existe.
+
+    put:
+      summary: Actualiza un carrito de compras existente.
+      tags:
+        - carts
+      description: Actualiza los datos de un carrito de compras existente según su ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras a actualizar.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateCart"
+      responses:
+        200:
+          description: Éxito. Devuelve el carrito de compras actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        400:
+          description: Error de solicitud. El cuerpo de la solicitud es incorrecto.
+        404:
+          description: No encontrado. El carrito de compras con el ID especificado no existe.
+        500:
+          description: Error del servidor
+
+    delete:
+      summary: Elimina un carrito de compras existente.
+      tags:
+        - carts
+      description: Elimina un carrito de compras existente según su ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras a eliminar.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Éxito. El carrito de compras fue eliminado correctamente.
+        500:
+          description: Error del servidor
+
+  /api/carts/{cartId}/products/{productId}:
+    post:
+      summary: Agrega un producto al carrito.
+      tags:
+        - carts
+      description: Agrega un producto al carrito especificado por ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: productId
+          description: ID del producto a agregar al carrito.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Cantidad del producto a agregar al carrito.
+              example:
+                quantity: 2
+      responses:
+        200:
+          description: Éxito. Devuelve el carrito de compras actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        500:
+          description: Error del servidor
+
+    delete:
+      summary: Elimina un producto del carrito.
+      tags:
+        - carts
+      description: Elimina un producto del carrito especificado por ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: productId
+          description: ID del producto a eliminar del carrito.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Éxito. Devuelve el carrito de compras actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        500:
+          description: Error del servidor
+
+    put:
+      summary: Actualiza la cantidad de un producto en el carrito.
+      tags:
+        - carts
+      description: Actualiza la cantidad de un producto en el carrito especificado por ID.
+      parameters:
+        - in: path
+          name: cartId
+          description: ID del carrito de compras.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: productId
+          description: ID del producto a actualizar en el carrito.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: Nueva cantidad del producto en el carrito.
+              example:
+                quantity: 5
+      responses:
+        200:
+          description: Éxito. Devuelve el carrito de compras actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        500:
+          description: Error del servidor
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        user:
+          type: string
+          description: ID del usuario propietario del carrito.
+        products:
+          type: array
+          description: Lista de productos en el carrito.
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: Id del producto
+              quantity: 
+                type: number
+                description: Cantidad de unidades del producto 
+

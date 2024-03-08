@@ -10,6 +10,9 @@ import configureRoutes from "./routes/routes.js";
 import config from "./config/server.config.js";
 import { addLogger } from "./middlewares/logger.middleware.js";
 import { db, mongoStoreOptions } from "./config/db.config.js";
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+import { info } from "./config/swagger.config.js";
 
 // Server configuration
 const app = express();
@@ -25,6 +28,10 @@ if (port) {
 } else {
   console.error("No hay variables de entorno configuradas");
 }
+
+// Configuración de Swagger 
+const spects = swaggerJSDoc(info);
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(spects));
 
 // Configuración de WEBSOCKETS para el chat
 configureSocketIO(httpServer);
