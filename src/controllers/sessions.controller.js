@@ -26,5 +26,6 @@ export const loginUserWithPassport = async (req, res) => {
       .send({ status: "Error", error: "Invalid Credentials" });
   req.session.user = user
   console.log(`El usuario "${req.session.user.email}" ha iniciado sesion`)
+  res.status(200);
   res.redirect("/profile");
 };

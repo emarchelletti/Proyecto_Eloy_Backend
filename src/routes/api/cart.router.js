@@ -9,7 +9,7 @@ router.get("/:cartId", cartController.getById);
 router.post("/", cartController.create);
 router.put("/:cartId", cartController.update);
 router.delete("/:cartId", cartController.remove);
-router.post("/:cartId/products/:productId", isUserOrPremium,cartController.addProdToCart);
+router.post("/:cartId/products/:productId", cartController.addMockProdToCart);
 router.delete("/:cartId/products/:productId", isUser,cartController.removeProdToCart);
 router.put("/:cartId/products/:productId", isUser,cartController.updateProdQuantityToCart);
 router.get  ("/:cartId/purchase", isUser,cartController.processPurchase);

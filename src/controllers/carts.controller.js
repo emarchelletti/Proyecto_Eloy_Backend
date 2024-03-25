@@ -72,6 +72,23 @@ export const addProdToCart = async (req, res) => {
   }
 };
 
+export const addMockProdToCart = async (req, res) => {
+  const { cartId, productId } = req.params;
+  const { quantity } = req.body; // aca tendria que agregar un contador al view de products para mandar la cantidad x el body
+  try {
+    const updatedCart = await cartService.addProductToCart(
+      cartId,
+      productId,
+      quantity,
+      
+    );
+    console.log("Se agrego un producto al carrito 'addMockProdToCart'");
+    res.status(200).json({message: "Se agrego un producto al carrito" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const removeProdToCart = async (req, res) => {
   const { cartId, productId } = req.params;
   try {
