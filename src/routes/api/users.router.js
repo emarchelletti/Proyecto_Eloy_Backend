@@ -10,6 +10,7 @@ const router = express.Router();
 // Rutas para administrar los usuarios (desde Postman)
 router.get("/", userController.getAllUsers);
 router.post("/", userController.addUser);
+router.delete("/", userController.deleteAllUsers);
 router.put("/:userId", userController.updateUser);
 router.delete("/:userId", userController.deleteUser);
 router.put("/premium/:userId", userController.upgradeUser);

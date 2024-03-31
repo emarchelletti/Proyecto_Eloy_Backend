@@ -97,3 +97,18 @@ export const uploadDocument = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Eliminar los usuarios incativos
+export const deleteAllUsers = async (req, res) => {
+  try {
+    // Buscar usuarios inactivos
+    const inactiveUsers = await usersService.findInactiveUsers();
+
+    // Eliminar usuarios inactivos y enviar correos electrónicos
+    await usersService.deleteInactiveUsers(inactiveUsers);
+
+    res.status(200).json({ message: 'Usuarios eliminados correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar usuarios inactivos:', error);
+    res.status(500).json({ error: 'Error al eliminar usuarios inactivos' });
+  }
+};

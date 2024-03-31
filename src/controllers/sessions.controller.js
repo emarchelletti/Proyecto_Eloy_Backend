@@ -1,4 +1,5 @@
 import * as sessionsService from "../dao/services/sessions.service.js";
+import usersService from "../dao/services/users.service.js";
 
 // Muestra las sesiones activas
 export const showActiveSessions = async (req, res) => {
@@ -19,12 +20,24 @@ export const destroySession = (req, res) => {
 
 // Autentica a un usuario y almacena la información en la sesión con Passport
 export const loginUserWithPassport = async (req, res) => {
-  let user = req.user;
-  if (!user)
-    return res
-      .status(400)
-      .send({ status: "Error", error: "Invalid Credentials" });
-  req.session.user = user
-  console.log(`El usuario "${req.session.user.email}" ha iniciado sesion`)
-  res.redirect("/profile");
+  try {
+    const user = req.user;
+
+    // Guardar la fecha y hora actual en la propiedad last_connection
+    user.last_connection = new Date();
+
+    // Actualizar el usuario en la base de datos
+    const updatedUser = await usersService.updateUser(user._id, user);
+
+    // Guardar el usuario en la sesión
+    req.session.user = updatedUser;
+
+    console.log(`El usuario "${updatedUser.email}" ha iniciado sesión`);
+
+    // Redirigir al perfil del usuario
+    res.redirect('/profile');
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
 };

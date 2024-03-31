@@ -44,7 +44,7 @@ app.set("view engine", "handlebars"); //Se establece el motor de vista como 'han
 // MIDDLEWARES
 app.use(express.json()); // Middleware para analizar el cuerpo de las solicitudes como datos JSON
 app.use(express.urlencoded({ extended: true })); // Middleware para analizar el cuerpo de las solicitudes como datos codificados en formularios
-app.use(express.static("src/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
+app.use(express.static("src/utils/public")); // Configurar Express para servir archivos estáticos desde la carpeta "public"
 app.use(cookieParser());
 app.use(session(mongoStoreOptions)); // Configuración de middleware para manejar sesiones usando connect-mongo
 app.use(cors({ origin: "http://localhost:8080/", methods: ["GET", "POST", "PUT"] }));

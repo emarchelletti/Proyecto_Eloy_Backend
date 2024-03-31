@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import config from "../config/server.config.js";
+import dotenv from "dotenv";
 
 mongoose.connect(config.url, {});
+dotenv.config('.env');
 
 const db = mongoose.connection;
 

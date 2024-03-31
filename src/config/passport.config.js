@@ -51,6 +51,7 @@ const initializePassport = () => {
         try {
           let user = await userModel.findOne({ email: username });
           let cartOwner;
+          
           if (!user) {
             let message = "Usuario no existe ";
             console.log(message);

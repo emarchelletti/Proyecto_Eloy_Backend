@@ -1,10 +1,12 @@
 import userModel from "../models/user.model.js";
+import userDTO from "../dto/user.dto.js";
 
 const usersService = {
   getAllUsers: async () => {
     try {
       const users = await userModel.find();
-      return users;
+      const usersDTO = users.map((user) => new userDTO(user));
+      return usersDTO;
     } catch (error) {
       throw new Error("Error al obtener todos los usuarios");
     }
@@ -12,6 +14,7 @@ const usersService = {
 
   addUser: async (userData) => {
     try {
+      console.log(userData);
       let user = await userModel.findOne({ email: userData.email });
       if (user) {
         console.log(
@@ -70,10 +73,10 @@ const usersService = {
       }
 
       // Iterar sobre cada documento en el array documentInfoArray
-      documentInfo.forEach(document => {
-      // Agregar el nuevo documento al array 'documents'
-      user.documents.push(document);
-    });
+      documentInfo.forEach((document) => {
+        // Agregar el nuevo documento al array 'documents'
+        user.documents.push(document);
+      });
 
       // Guardar los cambios en la base de datos
       await user.save();
@@ -91,7 +94,45 @@ const usersService = {
     } catch (error) {
       throw new Error("Error al obtener los documentos del usuario");
     }
-  }  
+  },
+
+  findInactiveUsers: async () => {
+    try {
+      const fiveMinutesAgo = new Date();
+      fiveMinutesAgo.setMinutes(fiveMinutesAgo.getMinutes() - 5);
+
+      // Buscar usuarios que no han tenido conexión en los últimos 2 días
+      const inactiveUsers = await userModel.find({
+        last_connection: { $lt: fiveMinutesAgo },
+      });
+      console.log(inactiveUsers);
+      return inactiveUsers;
+    } catch (error) {
+      console.error("Error al buscar usuarios inactivos:", error);
+      throw new Error("Error al buscar usuarios inactivos");
+    }
+  },
+
+  deleteInactiveUsers: async (inactiveUsers) => {
+    try {
+      // Eliminar usuarios inactivos de la base de datos
+      await userModel.deleteMany({
+        _id: { $in: inactiveUsers.map((user) => user._id) },
+      });
+
+      // Enviar un correo electrónico a cada usuario eliminado
+      // inactiveUsers.forEach(async (user) => {
+      //   await sendEmail(
+      //     user.email,
+      //     "Cuenta eliminada por inactividad",
+      //     "Su cuenta ha sido eliminada por inactividad."
+      //   );
+      // });
+    } catch (error) {
+      console.error("Error al eliminar usuarios inactivos:", error);
+      throw new Error("Error al eliminar usuarios inactivos");
+    }
+  },
 };
 
 export default usersService;
