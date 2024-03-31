@@ -27,7 +27,7 @@ if (port) {
   });
 } else {
   console.error("No hay variables de entorno configuradas");
-}
+} 
 
 // Configuración de Swagger 
 const spects = swaggerJSDoc(info);

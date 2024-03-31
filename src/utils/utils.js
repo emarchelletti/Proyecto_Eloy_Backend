@@ -38,9 +38,19 @@ export const generateMockProducts = () => {
     stock: fakerES.number.int({ min: 0, max: 200 }),
     category: fakerES.commerce.productAdjective(),
     thumbnail: fakerES.image.url(),
-    visible : true,
+    visible: true,
   };
 };
 
-const __filename = fileURLToPath(import.meta.url);
-export const __dirname = dirname(__filename);
+// Función para verificar si el usuario ha cargado todos los documentos requeridos
+export const checkRequiredDocuments = (userDocuments) => {
+  const requiredDocuments = ["DNI", "DOMICILIO", "CBU"];
+  for (const document of requiredDocuments) {
+    if (!userDocuments.some((doc) => doc.name === document)) {
+      return false; 
+    }
+  }
+  return true;
+}; 
+
+export const __dirname = dirname(fileURLToPath(import.meta.url));
