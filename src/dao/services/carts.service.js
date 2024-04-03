@@ -47,6 +47,7 @@ const   cartService = {
     }
   },
 
+  
   addProductToCart: async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findById(cartId);

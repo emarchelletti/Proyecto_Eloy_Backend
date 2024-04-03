@@ -1,0 +1,28 @@
+<h1>Administrador de usuarios</h1>
+{{#each users}}
+  <p><strong>Nombre:</strong> {{this.first_name}}</p>
+  <p><strong>ID:</strong> {{this._id}}</p>
+  <p><strong>Correo Electrónico:</strong> {{this.email}}</p>
+  <p><strong>Rol:</strong> {{this.role}}</p>
+
+  <!-- Formulario para modificar el rol -->
+  <form class="update-user-form" action="/api/users/{{this._id}}" method="POST">
+    <label for="role">Nuevo Rol:</label>
+    <select name="role" id="role">
+      <option value="user">Usuario</option>
+      <option value="admin">Administrador</option>
+      <option value="premium">Premium</option>
+    </select>
+
+    <button type="submit">Actualizar Rol</button>
+  </form>
+
+  <!-- Formulario para eliminar el usuario -->
+  <form class="delete-user-form" action="/api/users/{{this._id}}" method="POST">
+    <button class="delete-button" type="submit">Eliminar
+      Usuario</button>
+  </form>
+  <hr />
+{{/each}}
+
+<script type="text/javascript" src="/js/admin.js"></script>

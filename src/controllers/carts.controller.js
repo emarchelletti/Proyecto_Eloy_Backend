@@ -100,20 +100,6 @@ export const updateProdQuantityToCart = async (req, res) => {
   }
 };
 
-export const showCart = async (req, res) => {
-  try {
-    const cartId = req.session.user.cart;
-    const cart = await cartService.getCartById(cartId);
-    if (!cart) {
-      return res.status(404).json({ error: "Carrito no encontrado" });
-    }
-    res.render("cart", { cart });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener el carrito" });
-  }
-};
-
 export const processPurchase = async (req, res) => {
   const { cartId } = req.params;
   const userEmail = req.session.user.email;

@@ -1,0 +1,24 @@
+<header>
+  <div class="header-left">
+    <h1>E COMMERCE</h1>
+  </div>
+  <div class="header-right">
+    <button onclick="window.location.href='/login'">Login</button>
+    <button onclick="window.location.href='/register'">Registro</button>
+  </div>
+</header>
+
+<h1>LISTADO DE PRODUCTOS</h1>
+
+<div class="product-container">
+  {{#each products}}
+    <div class="product">
+      <h3>{{this.title}}</h3>
+      <p>Precio: {{this.price}}</p>
+      <p>Categoría: {{this.category}}</p>
+      <button onclick="window.location.href='/products/{{this._id}}'"> Ver detalles </button>
+    </div>
+  {{/each}}
+</div>
+
+

@@ -58,3 +58,54 @@ export const sendSMS = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
+
+export const userDeleteEmail = async (email) => {
+  try {
+    const html = `
+      <html>
+        <div>
+          <p>Hola,</p>
+          <p>Su usuario fue eliminado</p>
+        </div>
+      </html>
+    `;
+    
+    const mailOptions = {
+      from: emailConfig.emailUser,
+      to: email,
+      subject: 'Usuario eliminado por inactividad',
+      html,
+    };
+    
+    const result = await transport.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al enviar el correo electrónico');
+  }
+};
+
+export const productDeleteEmail = async (email) => {
+  try {
+    const html = `
+      <html>
+        <div>
+          <p>Se elimino un producto creado por su usuario premium</p>
+        </div>
+      </html>
+    `;
+    
+    const mailOptions = {
+      from: emailConfig.emailUser,
+      to: email,
+      subject: 'Producto eliminado',
+      html,
+    };
+    
+    const result = await transport.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al enviar el correo electrónico');
+  }
+};

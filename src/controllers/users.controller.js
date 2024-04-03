@@ -1,11 +1,13 @@
 import usersService from "../dao/services/users.service.js";
 import { createHash, checkRequiredDocuments } from "..//utils/utils.js";
+import userDTO from "../dao/dto/user.dto.js";
 
 // Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
   try {
     const users = await usersService.getAllUsers();
-    res.status(200).json(users);
+    const usersDTO = users.map((user) => new userDTO(user));
+    res.status(200).json(usersDTO);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -20,6 +22,7 @@ export const addUser = async (req, res) => {
     age: req.body.age,
     password: createHash(req.body.password),
     role: isAdmin ? "admin" : "user",
+    last_connection: new Date(),
   };
   try {
     const newUser = await usersService.addUser(userData);
@@ -110,5 +113,16 @@ export const deleteAllUsers = async (req, res) => {
   } catch (error) {
     console.error('Error al eliminar usuarios inactivos:', error);
     res.status(500).json({ error: 'Error al eliminar usuarios inactivos' });
+  }
+};
+// Mostrar usuarios al administrador
+export const adminUserView = async (req, res) => {
+  try {
+    const users = await usersService.getAllUsers(); // Obtiene los usuarios
+    const plainUsers = users.map(user => user.toObject()); // Convierte cada usuario a un objeto plano
+    res.render('adminProfile', { users: plainUsers });
+  } catch (error) {
+    console.error('Error al obtener usuario:', error);
+    res.status(500).json({ error: 'Error al obtener usuario' });
   }
 };

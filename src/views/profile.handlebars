@@ -7,13 +7,15 @@
   <form action="{{actionLogin}}" method="post">
     <input type="submit" value="Cerrar sesion" />
   </form>
-  <div class="button-container">
-  <button onclick="window.location.href='/products'">Comprar productos</button>
-  <button onclick="window.location.href='/chat'">Iniciar chat</button>
-</div>
+  <div class="profile-button-container">
+    <button onclick="window.location.href='/'">Home</button>
+    <button onclick="window.location.href='/products'">Comprar productos</button>
+    <button onclick="window.location.href='/chat'">Iniciar chat</button>
+    <button onclick="window.location.href='/admin'">Administrador</button>
+  </div>
 {{else}}
-  <p>El usuario no esta logueado</p>
+  <p>El usuario no está logueado</p>
   <a href="/login">
-    <button>Volver a inicio de sesion</button>
+    <button>Volver a inicio de sesión</button>
   </a>
 {{/if}}

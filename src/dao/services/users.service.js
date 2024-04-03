@@ -1,12 +1,11 @@
 import userModel from "../models/user.model.js";
-import userDTO from "../dto/user.dto.js";
+import {userDeleteEmail} from '../../controllers/notification.controller.js';
 
 const usersService = {
   getAllUsers: async () => {
     try {
       const users = await userModel.find();
-      const usersDTO = users.map((user) => new userDTO(user));
-      return usersDTO;
+      return users;
     } catch (error) {
       throw new Error("Error al obtener todos los usuarios");
     }
@@ -14,7 +13,6 @@ const usersService = {
 
   addUser: async (userData) => {
     try {
-      console.log(userData);
       let user = await userModel.findOne({ email: userData.email });
       if (user) {
         console.log(
@@ -115,19 +113,15 @@ const usersService = {
 
   deleteInactiveUsers: async (inactiveUsers) => {
     try {
+            // Enviar un correo electrónico a cada usuario eliminado
+      inactiveUsers.forEach(async (user) => {
+        console.log(`Se envio mail a la casilla: ${user.email}`)
+        await userDeleteEmail(user.email);
+      });
       // Eliminar usuarios inactivos de la base de datos
       await userModel.deleteMany({
         _id: { $in: inactiveUsers.map((user) => user._id) },
       });
-
-      // Enviar un correo electrónico a cada usuario eliminado
-      // inactiveUsers.forEach(async (user) => {
-      //   await sendEmail(
-      //     user.email,
-      //     "Cuenta eliminada por inactividad",
-      //     "Su cuenta ha sido eliminada por inactividad."
-      //   );
-      // });
     } catch (error) {
       console.error("Error al eliminar usuarios inactivos:", error);
       throw new Error("Error al eliminar usuarios inactivos");

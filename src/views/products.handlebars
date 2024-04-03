@@ -1,22 +1,34 @@
+<header>
+  <div class="header-left">
+    <h1>E COMMERCE</h1>
+  </div>
+  <div class="header-right">
+    {{#if userData}}
+    <p>Hola {{userData.first_name}}</p>
+    <button onclick="window.location.href='/cart'">Ver Carrito</button>
+    <button onclick="window.location.href='/profile'">Mi Perfil</button>
+
+    {{else}}
+    <button onclick="window.location.href='/login'">Login</button>
+    {{/if}}
+  </div>
+</header>
+
 <h1>LISTADO DE PRODUCTOS</h1>
+
 <div class="product-container">
   {{#each products}}
-    <div class="product">
-      <h3>{{this.title}}</h3>
-      <p>{{this.description}}</p>
-      <p>Precio: {{this.price}}</p>
-      <p>Categoría: {{this.category}}</p>
-      <!-- Botón para ver detalles -->
-      {{!-- <a href="/products/{{this._id}}">Ver detalles</a> --}}
-      <!-- Botón para agregar al carrito -->
+  <div class="product">
+    <h2>{{this.title}}</h2>
+    <p>{{this.description}}</p>
+    <p>Precio: {{this.price}}</p>
+    <p>Categoría: {{this.category}}</p>
+    <div class="button-container">
+      <button onclick="window.location.href='/products/{{this._id}}'"> Ver detalles </button>
       <form action="/api/carts/{{../cartId}}/products/{{this._id}}" method="POST">
         <button type="submit">Agregar al carrito</button>
       </form>
     </div>
+  </div>
   {{/each}}
-  <div class="col-md-6">
-      <a href="/carts">
-        <button>VER CARRITO</button>
-      </a>
-    </div>
 </div>

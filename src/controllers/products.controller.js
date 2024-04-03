@@ -1,4 +1,5 @@
 import * as productService from "../dao/services/products.service.js";
+import { productDeleteEmail } from "../controllers/notification.controller.js";
 
 export const getAllProducts = async (req, res) => {
   const { limit, page, sort, query, available } = req.query;
@@ -52,13 +53,23 @@ export const updateProduct = async (req, res) => {
     if (user.role === "premium") {
       // Verificar si el usuario premium es el propietario del producto
       if (product.owner === user.email) {
-        updatedProduct = await productService.updateProduct(productId, updatedProductData);
-        return res.status(200).json({ message: "Producto actualizado con éxito" });
+        updatedProduct = await productService.updateProduct(
+          productId,
+          updatedProductData
+        );
+        return res
+          .status(200)
+          .json({ message: "Producto actualizado con éxito" });
       } else {
-        return res.status(403).json({ error: "No tienes permiso para actualizar este producto" });
+        return res
+          .status(403)
+          .json({ error: "No tienes permiso para actualizar este producto" });
       }
     } else {
-      updatedProduct = await productService.updateProduct(productId, updatedProductData);
+      updatedProduct = await productService.updateProduct(
+        productId,
+        updatedProductData
+      );
     }
 
     return res.json(updatedProduct);
@@ -75,8 +86,12 @@ export const deleteProduct = async (req, res) => {
     if (user.role === "premium") {
       // Verificar si el usuario premium es el propietario del producto
       if (product.owner === user.email) {
+        // Enviar mail al usuario notificandole del producto eliminado
+
+        await productDeleteEmail(user.email);
         await productService.deleteProduct(productId);
-        res.status(200).json({ message: "Producto eliminado con éxito" });
+
+        res.status(200).json({ message: "Producto eliminado con éxito y mail enviado al propietario" });
       } else {
         res
           .status(403)
@@ -89,24 +104,5 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al eliminar el producto" });
-  }
-};
-
-export const showProducts = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 10; // Cantidad de productos por página
-
-  try {
-    let cartId;
-    if (req.session && req.session.user && req.session.user.cart) {
-      cartId = req.session.user.cart;
-    }
-    const productsData = await productService.showProducts(page, limit);
-    productsData.cartId = cartId;
-
-    res.render("products", productsData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
   }
 };

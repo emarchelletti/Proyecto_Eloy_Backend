@@ -14,10 +14,10 @@
         </div>
       {{/each}}
     </div>
+          <button onclick="window.location.href='/api/carts/{{cart._id}}/purchase'"> Finalizar compra </button>
+
   </div>
 {{else}}
   <p>No se encontró el carrito.</p>
 {{/if}}
 
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="/js/products.js"></script>

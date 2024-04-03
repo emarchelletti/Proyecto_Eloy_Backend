@@ -13,17 +13,22 @@ const configureRoutes = (app) => {
   app.use("/api/products", productRouter);
   app.use("/api/mockingproducts", mockRouter);
   app.use("/api/carts", cartRouter);
-  app.use("/", viewsRoutes.indexRouter);
+
+  app.use("/", viewsRoutes.homeRouter);
+  app.use("/index", viewsRoutes.indexRouter);
   app.use("/login", viewsRoutes.loginRouter);
   app.use("/register", viewsRoutes.registerRouter);
   app.use("/passwordRecovery", viewsRoutes.passwordRecoveryRouter);
   app.use("/resetPassword", viewsRoutes.passwordResetRouter);
   app.use("/profile", viewsRoutes.profileRouter);
-  app.use("/carts", viewsRoutes.cartViewRouter);
+  app.use("/cart", viewsRoutes.cartViewRouter);
   app.use("/products", viewsRoutes.productsViewRouter);
   app.use("/chat", viewsRoutes.chatRouter);
+  app.use("/admin", viewsRoutes.adminUserViewRouter);
+
   app.use("/mail", notificationRouter.mailRouter);
   app.use("/sms", notificationRouter.smsRouter);
+
   app.use("/loggerTest", loggerRouter);
 };
 

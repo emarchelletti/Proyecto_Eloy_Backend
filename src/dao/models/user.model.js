@@ -27,12 +27,6 @@ const userSchema = new mongoose.Schema({
   last_connection: Date,
 });
 
-// userSchema.pre("findOne", function (next) {
-//   // Actualizar last_connection antes de actualizar el documento
-//   this._update.last_connection = new Date();
-//   next();
-// });
-
 const userModel = mongoose.model(userCollection, userSchema);
 
 export default userModel;

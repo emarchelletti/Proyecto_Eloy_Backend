@@ -16,6 +16,7 @@ db.once("open", () => {
   console.log("Conectado a la base de datos");
 });
 
+// CONFIGURACION DE LA SESSION
 export const mongoStoreOptions = {
   secret: process.env.SESSION_SECRET, // Clave secreta para firmar las cookies de sesión
   resave: false, // Evitar que se guarde la sesión en cada solicitud

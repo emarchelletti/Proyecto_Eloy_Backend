@@ -37,7 +37,7 @@ export const getAllProducts = async ({
     if (page < totalPages) {
       result.hasNextPage = true;
       result.nextPage = parseInt(page) + 1;
-      result.nextLink = `/products?limit=${limit}&page=${
+      result.nextLink = `/api/products?limit=${limit}&page=${
         result.nextPage
       }&sort=${sort || ""}&query=${query || ""}`;
     }
@@ -79,7 +79,7 @@ export const getAllProducts = async ({
 
 export const getProductById = async (productId) => {
   try {
-    const product = await productModel.findById(productId);
+    const product = await productModel.findById(productId).lean();
     return product;
   } catch (error) {
     throw new Error("Error al obtener el producto");
@@ -90,7 +90,7 @@ export const createProduct = async (newProductData) => {
   try {
     const newProduct = new productModel(newProductData);
     await newProduct.save();
-    console.log(`Se agrego un producto: ${newProduct.title}`);
+    console.log(`El usuario ${newProduct.owner} agrego un nuevo producto: ${newProduct.title}`);
     return newProduct;
   } catch (error) {
     throw new Error(error);
