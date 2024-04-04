@@ -7,12 +7,12 @@ import cors from "cors";
 import initializePassport from "./config/passport.config.js";
 import configureSocketIO from "./config/socketio.config.js";
 import configureRoutes from "./routes/routes.js";
-import config from "./config/server.config.js";
 import { addLogger } from "./middlewares/logger.middleware.js";
 import { db, mongoStoreOptions } from "./config/db.config.js";
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
 import { info } from "./config/swagger.config.js";
+
 
 // Server configuration
 const app = express();

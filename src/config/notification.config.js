@@ -1,7 +1,3 @@
-import dotenv from "dotenv";
-
-dotenv.config();
-
 export const emailConfig = {
   serviceMail: process.env.SERVICE_MAIL,
   serviceMailPort: process.env.SERVICE_MAIL_PORT,

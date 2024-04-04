@@ -1,5 +1,4 @@
 import {transport, twilioClient} from "..//utils/utils.js";
-import {emailConfig, smsConfig} from "../config/notification.config.js";
 import userModel from "../dao/models/user.model.js";
 import jwt from 'jsonwebtoken';
 
@@ -27,7 +26,7 @@ export const sendEmail = async (req, res) => {
     `;
     
     const mailOptions = {
-      from: emailConfig.emailUser,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Restablecer contraseña',
       html,
@@ -48,7 +47,7 @@ export const sendSMS = async (req, res) => {
     const body = `Hola ${name},  ${message} `;
 
     const result = await twilioClient.messages.create({
-      from: smsConfig.smsNumber,
+      from: process.env.TWILIO_SMS_NUMBER,
       to,
       body,
     });
@@ -71,7 +70,7 @@ export const userDeleteEmail = async (email) => {
     `;
     
     const mailOptions = {
-      from: emailConfig.emailUser,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Usuario eliminado por inactividad',
       html,
@@ -96,7 +95,7 @@ export const productDeleteEmail = async (email) => {
     `;
     
     const mailOptions = {
-      from: emailConfig.emailUser,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Producto eliminado',
       html,

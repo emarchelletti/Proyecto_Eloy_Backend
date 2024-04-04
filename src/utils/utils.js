@@ -6,7 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import twilio from "twilio";
 import { fakerES } from "@faker-js/faker";
-import { emailConfig, smsConfig } from "../config/notification.config.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -19,15 +20,15 @@ export const generateUniqueCode = () => {
 };
 
 export const transport = nodemailer.createTransport({
-  service: emailConfig.serviceMail,
-  port: emailConfig.serviceMailPort,
+  service: process.env.SERVICE_MAIL,
+  port: process.env.SERVICE_MAIL_PORT,
   auth: {
-    user: emailConfig.emailUser,
-    pass: emailConfig.emailPassword,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
-export const twilioClient = twilio(smsConfig.smsAccount, smsConfig.smsToken);
+export const twilioClient = twilio(process.env.TWILIO_ACCOUNT_ID, process.env.TWILIO_AUTH_TOKEN);
 
 export const generateMockProducts = () => {
   return {
