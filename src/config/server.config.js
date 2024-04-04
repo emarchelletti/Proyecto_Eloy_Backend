@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 
 const commander = new Command();
 commander.option(
@@ -9,9 +9,8 @@ commander.option(
 commander.parse();
 const environment = commander.opts().environment;
 const envPath = `.env.${environment}`;
-//dotenv.config({ path: envPath }); USAR ESTE METODO CUANDO SE TENGAN .env DISTINTOS SEGUN EL MODO
 
-dotenv.config('.env');
+//dotenv.config('.env');
 
 export default {
   port: process.env.PORT,

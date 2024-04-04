@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
-import config from "../config/server.config.js";
-import dotenv from "dotenv";
 
-mongoose.connect(config.url, {});
-dotenv.config('.env');
+mongoose.connect(process.env.MONGO_URL, {});
 
 const db = mongoose.connection;
 
@@ -22,7 +19,7 @@ export const mongoStoreOptions = {
   resave: false, // Evitar que se guarde la sesión en cada solicitud
   saveUninitialized: true, // Guardar la sesión incluso si no se ha modificado
   store: MongoStore.create({
-    mongoUrl: config.url,
+    mongoUrl: process.env.MONGO_URL,
     ttl: 15 * 60, // Tiempo de vida de la sesión en segundos (15 minutos en este caso)
   }),
 };

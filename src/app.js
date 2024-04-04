@@ -16,13 +16,13 @@ import { info } from "./config/swagger.config.js";
 
 // Server configuration
 const app = express();
-const port = config.port;
+const port = process.env.PORT;
 let httpServer = "";
 
 if (port) {
   httpServer = app.listen(port, () => {
     console.log(
-      `Servidor iniciado en http://localhost:${port} en modo ${config.environment}`
+      `Servidor iniciado en http://localhost:${port} en modo ${process.env.NODE_ENV}`
     );
   });
 } else {
