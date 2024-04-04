@@ -3,8 +3,15 @@
     <h1>E COMMERCE</h1>
   </div>
   <div class="header-right">
+    {{#if userData}}
+    <p>Hola {{userData.first_name}}</p>
+    <button onclick="window.location.href='/cart'">Ver Carrito</button>
+    <button onclick="window.location.href='/profile'">Mi Perfil</button>
+
+    {{else}}
     <button onclick="window.location.href='/login'">Login</button>
     <button onclick="window.location.href='/register'">Registro</button>
+    {{/if}}
   </div>
 </header>
 

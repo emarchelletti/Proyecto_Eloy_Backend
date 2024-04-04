@@ -25,9 +25,14 @@ export const homeShowProducts = async (req, res) => {
   const limit = 8;
 
   try {
+    let cartId;
+    if (req.session && req.session.user && req.session.user.cart) {
+      cartId = req.session.user.cart;
+    }
     const productsData = await productService.showProducts(page, limit);
-    res.render("home", productsData);
-  } catch (error) {
+    productsData.cartId = cartId;
+    const userData = req.session.user;
+    res.render("home", { products: productsData.products, userData, cartId });  } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }

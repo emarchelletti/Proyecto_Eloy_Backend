@@ -47,7 +47,7 @@ const   cartService = {
     }
   },
 
-  
+
   addProductToCart: async (cartId, productId, quantity) => {
     try {
       const cart = await cartModel.findById(cartId);
@@ -154,7 +154,7 @@ const   cartService = {
       const ticket = await generateTicket(purchaser, amount);
 
       // Limpiar el carrito después de la compra
-      // await cartModel.findByIdAndUpdate(cartId, { $set: { products: [] } });
+       await cartModel.findByIdAndUpdate(cartId, { $set: { products: [] } });
 
       return { success: true, ticket };
     } catch (error) {

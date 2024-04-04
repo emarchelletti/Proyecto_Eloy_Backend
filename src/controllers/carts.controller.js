@@ -58,7 +58,9 @@ export const addProdToCart = async (req, res) => {
   try {
     const product = await productService.getProductById(productId);
     if (user.role === "premium" && product.owner === user.email) {
-      return res.status(403).json({ error: "No puedes agregar tu propio producto al carrito" });
+      return res
+        .status(403)
+        .json({ error: "No puedes agregar tu propio producto al carrito" });
     }
     const updatedCart = await cartService.addProductToCart(
       cartId,
@@ -105,7 +107,8 @@ export const processPurchase = async (req, res) => {
   const userEmail = req.session.user.email;
   try {
     const result = await cartService.processPurchase(cartId, userEmail);
-    res.json(result);
+    const ticketData = result.ticket.toObject();
+    res.render("ticket", { ticket: ticketData });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,23 +1,25 @@
 <h1>Detalles del Carrito</h1>
 
 {{#if cart}}
-  <div class="cart-details">
-    <h2>Carrito de: {{cart.user}}</h2>
-    <h2>ID del Carrito: {{cart._id}}</h2>
-    <div class="product form">
-      <h3>Productos en el Carrito:</h3>
-      {{#each cart.products}}
-        <div class="product-cart">
-          <h4>{{this.product.title}}</h4>
-          <p>Cantidad: {{this.quantity}}</p>
-          <p>Precio unitario: ${{this.product.price}}</p>
-        </div>
-      {{/each}}
+<div class="cart-details">
+  <h2>Carrito de: {{cart.user}}</h2>
+  <h2>ID del Carrito: {{cart._id}}</h2>
+  <div class="product form">
+    <h3>Productos en el Carrito:</h3>
+    {{#each cart.products}}
+    <div class="product-cart">
+      <h4>{{this.product.title}}</h4>
+      <p>Cantidad: {{this.quantity}}</p>
+      <p>Precio unitario: ${{this.product.price}}</p>
     </div>
-          <button onclick="window.location.href='/api/carts/{{cart._id}}/purchase'"> Finalizar compra </button>
-
+    {{/each}}
   </div>
+  <button onclick="window.location.href='/products'"> Seguir comprando </button>
+  <button class='purchase-button' onclick="window.location.href='/api/carts/{{cart._id}}/purchase'"> Finalizar compra
+  </button>
+</div>
 {{else}}
-  <p>No se encontró el carrito.</p>
+<p>No se encontró el carrito.</p>
 {{/if}}
 
+<script type="text/javascript" src="/js/cart.js"></script>

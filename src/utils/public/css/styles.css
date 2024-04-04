@@ -96,7 +96,17 @@ h1 {
   box-shadow: 4px 4px 8px gray;
   background-color: #710d06;
 }
-
+.purchase-button{
+  color: #f0efec;
+  background-color: #03530c;
+  text-decoration: solid;
+  border: #050504;
+  box-shadow: 2px 2px 4px gray;
+}
+.delete-button:hover {
+  box-shadow: 4px 4px 8px rgb(15, 71, 1);
+  background-color: #710d06;
+}
 
 
 
@@ -180,4 +190,22 @@ button:active {
   max-width: 100%;
   height: auto;
   margin-top: 20px;
+}
+
+.ticket-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.ticket-info {
+  margin-bottom: 20px;
+}
+.ticket-info h2 {
+  margin-bottom: 10px;
+}
+.ticket-info p {
+  margin: 5px 0;
 }
