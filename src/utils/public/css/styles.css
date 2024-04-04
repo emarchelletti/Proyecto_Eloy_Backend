@@ -103,9 +103,9 @@ h1 {
   border: #050504;
   box-shadow: 2px 2px 4px gray;
 }
-.delete-button:hover {
-  box-shadow: 4px 4px 8px rgb(15, 71, 1);
-  background-color: #710d06;
+.purchase-button:hover {
+  box-shadow: 2px 2px 4px gray;
+  background-color: #023107;
 }
 
 

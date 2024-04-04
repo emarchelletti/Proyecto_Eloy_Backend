@@ -14,7 +14,7 @@
   </div>
 </header>
 
-<h1>LISTADO DE PRODUCTOS</h1>
+<h1>PRODUCTOS DISPONIBLES</h1>
 
 <div class="product-container">
   {{#each products}}
@@ -26,9 +26,15 @@
     <div class="button-container">
       <button onclick="window.location.href='/products/{{this._id}}'"> Ver detalles </button>
       <form action="/api/carts/{{../cartId}}/products/{{this._id}}" method="POST">
-        <button type="submit">Agregar al carrito</button>
+        <button type="submit" onclick="showAlert()" >Agregar al carrito</button>
       </form>
     </div>
   </div>
   {{/each}}
 </div>
+
+<script>
+  function showAlert() {
+    alert('El producto se ha agregado al carrito.');
+  }
+</script>
